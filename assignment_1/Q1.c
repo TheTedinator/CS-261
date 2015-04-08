@@ -15,14 +15,12 @@
 #include <math.h>
 #include <assert.h>
 
-struct student
-{
+struct student{
 	int id;
 	int score;
 };
 
-struct student* allocate()
-{
+struct student* allocate(){
   /* Allocate memory for ten students */
   struct student *mem = malloc(10*sizeof(struct student));
   assert(mem!=0);
@@ -31,8 +29,7 @@ struct student* allocate()
   return mem;
 }
 
-void generate(struct student* students)
-{
+void generate(struct student* students){
   /* Generate random ID and scores for 10 students, ID being between 1 and 10,
      scores between 0 and 100 */
      for (int i = 0; i < 10; ++i)
@@ -42,27 +39,23 @@ void generate(struct student* students)
      }
 }
 
-void output(struct student* students)
-{
+void output(struct student* students){
   /* Output information about the ten students in the format:
      ID1 Score1
      ID2 score2
      ID3 score3
      ...
      ID10 score10 */
-  for (int i = 0; i < 10; ++i)
-    {
+  for (int i = 0; i < 10; ++i){
       printf("ID%d Score%d\n", students[i].id, students[i].score);
     }
 }
 
-void summary(struct student* students)
-{
+void summary(struct student* students){
   /* Compute and print the minimum, maximum and average scores of the ten
      students */
   int min = 100, max = 0, sum = 0;
-  for (int i = 0; i < 10; ++i)
-    {
+  for (int i = 0; i < 10; ++i){
       if (students[i].score > max) max = students[i].score;
       if (students[i].score < min) min = students[i].score;
       sum += students[i].score;
@@ -70,14 +63,12 @@ void summary(struct student* students)
   printf("Max: %d\nMin:%d\nAverage:%d\n", max, min, sum/10);
 }
 
-void deallocate(struct student* stud)
-{
+void deallocate(struct student* stud){
   /* Deallocate memory from stud */
   free(stud);
 }
 
-int main()
-{
+int main(){
   srand(time(NULL));
   struct student* stud = NULL;
 

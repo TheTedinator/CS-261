@@ -14,8 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void fooA(int* iptr)
-{
+void fooA(int* iptr){
      /* Print the value of the integer pointed to by iptr */
      printf("Value of int pointed to by iptr is %d\n", *iptr);
 
@@ -26,8 +25,7 @@ void fooA(int* iptr)
      printf("Address of iptr %p\n", &iptr);
 }
 
-int main()
-{
+int main(){
     /* Declare an integer x */
     int x = 0;
 
