@@ -1,24 +1,32 @@
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
 
-Q0
+# Precompiled Headers
+*.gch
+*.pch
 
-Q0.dSYM/Contents/Info.plist
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
 
-Q1
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
 
-Q1.dSYM/Contents/Info.plist
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
 
-Q2
-
-Q2.dSYM/Contents/Info.plist
-
-Q3
-
-Q3.dSYM/Contents/Info.plist
-
-Q4
-
-Q4.dSYM/Contents/Info.plist
-
-Q5
-
-Q5.dSYM/Contents/Info.plist
+# Debug files
+*.dSYM/
