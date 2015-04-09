@@ -24,7 +24,7 @@ void sort(struct student* students, int n){
   struct student curr;
 
   for(int i = 0; i < n; i++){
-    students[i] = curr;
+    curr = students[i];
     for(int j = (i + 1); j < n; j++){
       if(students[j].score < curr.score){
         students[i] = students[j];
@@ -53,7 +53,7 @@ int main(){
   /* Print the contents of the array of n students. */
   printf("Unsorted:\n");
   for(int i = 0; i < n; i++){
-      printf("ID%d Score%d\n", Students[i].id, Students[i].score);
+      printf("ID %d Score %d\n", Students[i].id, Students[i].score);
     }
   printf("\n");
 
@@ -63,7 +63,7 @@ int main(){
   /* Print the contents of the array of n students. */
   printf("Sorted:\n");
   for(int i = 0; i < n; i++){
-      printf("ID%d Score%d\n", Students[i].id, Students[i].score);
+      printf("ID %d Score %d\n", Students[i].id, Students[i].score);
     }
 
   return 0;
