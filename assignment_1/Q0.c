@@ -1,7 +1,7 @@
 /* CS261- Assignment 1 - Q. 0*/
 /* Name: Keeley Abbott and Theodore Duchow-Pressley
    Date: 2015 April, 6
-   Solution description: In main(), the integer x is declared, and set to 0,
+s   Solution description: In main(), the integer x is declared, and set to 0,
                          the address of x is then printed, and then passed to
                          the function fooA(int* iptr). In fooA(int* iptr), the
                          value pointed to by iptr is printed, the address
@@ -27,7 +27,7 @@ void fooA(int* iptr){
 
 int main(){
     /* Declare an integer x */
-    int x = 0;
+    int x = 42;
 
     /* Print the address of x */
     printf("Address of x is %p\n", &x);
