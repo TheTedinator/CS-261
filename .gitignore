@@ -33,3 +33,4 @@ Q*
 *.dSYM/*
 *.dSYM
 
+*.exe
