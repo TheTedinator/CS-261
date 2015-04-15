@@ -64,7 +64,7 @@ int main(int argc, char* argv[]){
 	assertTrue(EQ(topDynArr(dyn), 7), "Test topDynArr == 7");
 	
 	popDynArr(dyn);
-	printf("Poping...\nThe stack's content: [3,6,5] <- top\n");
+	printf("Popping...\nThe stack's content: [3,6,5] <- top\n");
 	assertTrue(EQ(topDynArr(dyn), 5), "Test topDynArr == 5");
 	
 	pushDynArr(dyn, 9);
@@ -80,8 +80,8 @@ int main(int argc, char* argv[]){
 	assertTrue(!containsDynArr(dyn, 7), "Test not containing 7");
 	
 	removeDynArr(dyn, 3);
-	printf("Removing 3...\nThe stack's content: [6,5,9]\n");
+	printf("Removing 3...\nThe bag's content: [6,5,9]\n");
 	assertTrue(!containsDynArr(dyn, 3), "Test not containing 3");
-	
+	assertTrue(sizeDynArr(dyn) == 3, "Test size = 3");//added test of size
 	return 0;
 }

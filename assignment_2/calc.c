@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
+#include <math.h>
 #include "dynamicArray.h"
 
 
@@ -40,7 +42,12 @@ int isNumber(char *s, double *num)
 */
 void add (struct DynArr *stack)
 {
-	/* FIXME: You will write this function */
+	assert(sizeDynArr(stack) >= 2);
+	TYPE a = topDynArr(stack);
+	popDynArr(stack);
+	TYPE b = topDynArr(stack);
+	popDynArr(stack);
+	pushDynArr(stack, a + b);
 }
 
 /*	param: stack the stack being manipulated
@@ -50,7 +57,12 @@ void add (struct DynArr *stack)
 */
 void subtract(struct DynArr *stack)
 {
-	/* FIXME: You will write this function */
+	assert(sizeDynArr(stack) >= 2);
+	TYPE a = topDynArr(stack);
+	popDynArr(stack);
+	TYPE b = topDynArr(stack);
+	popDynArr(stack);
+	pushDynArr(stack, b - a);
 }
 
 /*	param: stack the stack being manipulated
@@ -60,13 +72,133 @@ void subtract(struct DynArr *stack)
 */
 void divide(struct DynArr *stack)
 {
-	/* FIXME: You will write this function */
+	assert(sizeDynArr(stack) >= 2);
+	TYPE a = topDynArr(stack);
+	popDynArr(stack);
+	TYPE b = topDynArr(stack);
+	popDynArr(stack);
+	pushDynArr(stack, b / a);
 }
 
+/*	param: stack the stack being manipulated
+	pre: the stack contains at least two elements
+	post: the top two elements are popped and 
+	their product is pushed back onto the stack.
+*/
+void multiply(struct DynArr *stack)
+{
+	assert(sizeDynArr(stack) >= 2);
+	TYPE a = topDynArr(stack);
+	popDynArr(stack);
+	TYPE b = topDynArr(stack);
+	popDynArr(stack);
+	pushDynArr(stack, a * b);
+}
+/*	param: stack the stack being manipulated
+	pre: the stack contains at least two elements
+	post: the top two elements are popped and 
+	their power is pushed back onto the stack.
+*/
+void power(struct DynArr *stack)
+{
+	assert(sizeDynArr(stack) >= 2);
+	TYPE a = topDynArr(stack);
+	popDynArr(stack);
+	TYPE b = topDynArr(stack);
+	popDynArr(stack);
+	pushDynArr(stack, pow(b, a));
+}
+
+/*	param: stack the stack being manipulated
+	pre: the stack contains at least one element
+	post: the top element is popped and 
+	it's square is pushed back onto the stack.
+*/
+void square(struct DynArr *stack)
+{
+	assert(sizeDynArr(stack) >= 1);
+	TYPE a = topDynArr(stack);
+	popDynArr(stack);
+	pushDynArr(stack, pow(a, 2));
+}
+/*	param: stack the stack being manipulated
+	pre: the stack contains at least one element
+	post: the top element is popped and 
+	it's cube is pushed back onto the stack.
+*/
+void cube(struct DynArr *stack)
+{
+	assert(sizeDynArr(stack) >= 1);
+	TYPE a = topDynArr(stack);
+	popDynArr(stack);
+	pushDynArr(stack, pow(a, 3));
+}
+/*	param: stack the stack being manipulated
+	pre: the stack contains at least one element
+	post: the top element is popped and 
+	it's absolute value is pushed back onto the stack.
+*/
+void absolute(struct DynArr *stack)
+{
+	assert(sizeDynArr(stack) >= 1);
+	TYPE a = topDynArr(stack);
+	popDynArr(stack);
+	pushDynArr(stack, fabs(a));
+}
+/*	param: stack the stack being manipulated
+	pre: the stack contains at least one element
+	post: the top element is popped and 
+	it's square root is pushed back onto the stack.
+*/
+void root(struct DynArr *stack)
+{
+	assert(sizeDynArr(stack) >= 1);
+	TYPE a = topDynArr(stack);
+	popDynArr(stack);
+	pushDynArr(stack, sqrt(a));
+}
+
+/*	param: stack the stack being manipulated
+	pre: the stack contains at least one element
+	post: the top element x is popped and 
+	e^x is pushed back onto the stack.
+*/
+void exponent(struct DynArr *stack)
+{
+	assert(sizeDynArr(stack) >= 1);
+	TYPE a = topDynArr(stack);
+	popDynArr(stack);
+	pushDynArr(stack, exp(a));
+}
+/*	param: stack the stack being manipulated
+	pre: the stack contains at least one element
+	post: the top element is popped and 
+	it's ln is pushed back onto the stack.
+*/
+void ln(struct DynArr *stack)
+{
+	assert(sizeDynArr(stack) >= 1);
+	TYPE a = topDynArr(stack);
+	popDynArr(stack);
+	pushDynArr(stack, log(a));
+}
+/*	param: stack the stack being manipulated
+	pre: the stack contains at least one element
+	post: the top element is popped and 
+	it's ln is pushed back onto the stack.
+*/
+void logten(struct DynArr *stack)
+{
+	assert(sizeDynArr(stack) >= 1);
+	TYPE a = topDynArr(stack);
+	popDynArr(stack);
+	pushDynArr(stack, log10(a));
+}
 double calculate(int numInputTokens, char **inputString)
 {
 	int i;
-	double result = 0.0;
+	double num, result = 0.0;
+
 	char *s;
 	struct DynArr *stack;
 
@@ -92,37 +224,33 @@ double calculate(int numInputTokens, char **inputString)
 		else if(strcmp(s, "/") == 0)
 			divide(stack);
 		else if(strcmp(s, "x") == 0)
-			/* FIXME: replace printf with your own function */
-			printf("Multiplying\n");
+			multiply(stack);
 		else if(strcmp(s, "^") == 0)
-			/* FIXME: replace printf with your own function */
-			printf("Power\n");
+			power(stack);
 		else if(strcmp(s, "^2") == 0)
-			/* FIXME: replace printf with your own function */
-			printf("Squaring\n");
+			square(stack);
 		else if(strcmp(s, "^3") == 0)
-			/* FIXME: replace printf with your own function */
-			printf("Cubing\n");
+			cube(stack);
 		else if(strcmp(s, "abs") == 0)
-			/* FIXME: replace printf with your own function */
-			printf("Absolute value\n");
+			absolute(stack);
 		else if(strcmp(s, "sqrt") == 0)
-			/* FIXME: replace printf with your own function */
-			printf("Square root\n");
+			root(stack);
 		else if(strcmp(s, "exp") == 0)
-			/* FIXME: replace printf with your own function */
-			printf("Exponential\n");
+			exponent(stack);
 		else if(strcmp(s, "ln") == 0)
-			/* FIXME: replace printf with your own function */
-			printf("Natural Log\n");
+			ln(stack);
 		else if(strcmp(s, "log") == 0)
-			/* FIXME: replace printf with your own function */
-			printf("Log\n");
+			logten(stack);
 		else 
 		{
-			// FIXME: You need to develop the code here (when s is not an operator)
-			// Remember to deal with special values ("pi" and "e")
 			
+			if (isNumber(s, &num)){
+				pushDynArr(stack, num);
+			}else if (strcmp(s, "pi") == 0){
+				pushDynArr(stack, M_PI);
+			}else if (strcmp(s, "e") == 0){
+				pushDynArr(stack, M_E);
+			}
 		}
 	}	//end for 
 
@@ -130,7 +258,11 @@ double calculate(int numInputTokens, char **inputString)
 	 * (1) Check if everything looks OK and produce an error if needed.
 	 * (2) Store the final value in result and print it out.
 	 */
-	
+	if (sizeDynArr(stack)!=1){
+		printf("Invalid expression. Ignore result.\n");
+	}else{
+		result = topDynArr(stack);
+	}
 	return result;
 }
 
@@ -141,6 +273,6 @@ int main(int argc , char** argv)
 	if (argc == 1)
 		return 0;
 
-	calculate(argc,argv);
+	printf("The result is: %f\n", calculate(argc,argv));
 	return 0;
 }
