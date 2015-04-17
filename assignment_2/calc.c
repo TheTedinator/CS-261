@@ -40,14 +40,17 @@ int isNumber(char *s, double *num)
 	post: the top two elements are popped and 
 	their sum is pushed back onto the stack.
 */
-void add (struct DynArr *stack)
+void add(struct DynArr *stack)
 {
-	assert(sizeDynArr(stack) >= 2);
-	TYPE a = topDynArr(stack);
+    TYPE tmp, sum;
+    
+    assert(sizeDynArr(stack) >= 2);
+	
+    tmp = topDynArr(stack);
 	popDynArr(stack);
-	TYPE b = topDynArr(stack);
+	sum = (topDynArr(stack) + tmp);
 	popDynArr(stack);
-	pushDynArr(stack, a + b);
+	pushDynArr(stack, sum);
 }
 
 /*	param: stack the stack being manipulated
@@ -57,12 +60,15 @@ void add (struct DynArr *stack)
 */
 void subtract(struct DynArr *stack)
 {
-	assert(sizeDynArr(stack) >= 2);
-	TYPE a = topDynArr(stack);
+    TYPE tmp, dif;
+    
+    assert(sizeDynArr(stack) >= 2);
+    
+    tmp = topDynArr(stack);
 	popDynArr(stack);
-	TYPE b = topDynArr(stack);
+	dif = (topDynArr(stack) - tmp);
 	popDynArr(stack);
-	pushDynArr(stack, b - a);
+	pushDynArr(stack, dif);
 }
 
 /*	param: stack the stack being manipulated
@@ -72,12 +78,15 @@ void subtract(struct DynArr *stack)
 */
 void divide(struct DynArr *stack)
 {
-	assert(sizeDynArr(stack) >= 2);
-	TYPE a = topDynArr(stack);
+    TYPE tmp, quo;
+    
+    assert(sizeDynArr(stack) >= 2);
+    
+    tmp = topDynArr(stack);
 	popDynArr(stack);
-	TYPE b = topDynArr(stack);
+	quo = (topDynArr(stack) / tmp);
 	popDynArr(stack);
-	pushDynArr(stack, b / a);
+	pushDynArr(stack, quo);
 }
 
 /*	param: stack the stack being manipulated
@@ -87,13 +96,17 @@ void divide(struct DynArr *stack)
 */
 void multiply(struct DynArr *stack)
 {
-	assert(sizeDynArr(stack) >= 2);
-	TYPE a = topDynArr(stack);
+	TYPE tmp, prod;
+    
+    assert(sizeDynArr(stack) >= 2);
+	
+    tmp = topDynArr(stack);
 	popDynArr(stack);
-	TYPE b = topDynArr(stack);
+	prod = (topDynArr(stack) * tmp);
 	popDynArr(stack);
-	pushDynArr(stack, a * b);
+	pushDynArr(stack, prod);
 }
+
 /*	param: stack the stack being manipulated
 	pre: the stack contains at least two elements
 	post: the top two elements are popped and 
@@ -101,12 +114,15 @@ void multiply(struct DynArr *stack)
 */
 void power(struct DynArr *stack)
 {
-	assert(sizeDynArr(stack) >= 2);
-	TYPE a = topDynArr(stack);
+	TYPE tmp, pwr;
+    
+    assert(sizeDynArr(stack) >= 2);
+    
+    tmp = topDynArr(stack);
 	popDynArr(stack);
-	TYPE b = topDynArr(stack);
+	pwr = pow(topDynArr(stack), tmp);
 	popDynArr(stack);
-	pushDynArr(stack, pow(b, a));
+	pushDynArr(stack, pwr);
 }
 
 /*	param: stack the stack being manipulated
@@ -116,11 +132,15 @@ void power(struct DynArr *stack)
 */
 void square(struct DynArr *stack)
 {
-	assert(sizeDynArr(stack) >= 1);
-	TYPE a = topDynArr(stack);
+    TYPE base;
+    
+    assert(sizeDynArr(stack) >= 1);
+    
+    base = topDynArr(stack);
 	popDynArr(stack);
-	pushDynArr(stack, pow(a, 2));
+	pushDynArr(stack, pow(base, 2));
 }
+
 /*	param: stack the stack being manipulated
 	pre: the stack contains at least one element
 	post: the top element is popped and 
@@ -128,11 +148,15 @@ void square(struct DynArr *stack)
 */
 void cube(struct DynArr *stack)
 {
-	assert(sizeDynArr(stack) >= 1);
-	TYPE a = topDynArr(stack);
+    TYPE base;
+    
+    assert(sizeDynArr(stack) >= 1);
+    
+    base = topDynArr(stack);
 	popDynArr(stack);
-	pushDynArr(stack, pow(a, 3));
+	pushDynArr(stack, pow(base, 3));
 }
+
 /*	param: stack the stack being manipulated
 	pre: the stack contains at least one element
 	post: the top element is popped and 
@@ -140,11 +164,15 @@ void cube(struct DynArr *stack)
 */
 void absolute(struct DynArr *stack)
 {
+    TYPE val;
+    
 	assert(sizeDynArr(stack) >= 1);
-	TYPE a = topDynArr(stack);
+	
+    val = topDynArr(stack);
 	popDynArr(stack);
-	pushDynArr(stack, fabs(a));
+    pushDynArr(stack, fabs(val));
 }
+
 /*	param: stack the stack being manipulated
 	pre: the stack contains at least one element
 	post: the top element is popped and 
@@ -152,10 +180,13 @@ void absolute(struct DynArr *stack)
 */
 void root(struct DynArr *stack)
 {
+    TYPE rad;
+    
 	assert(sizeDynArr(stack) >= 1);
-	TYPE a = topDynArr(stack);
+    
+	rad = topDynArr(stack);
 	popDynArr(stack);
-	pushDynArr(stack, sqrt(a));
+	pushDynArr(stack, sqrt(rad));
 }
 
 /*	param: stack the stack being manipulated
@@ -165,11 +196,15 @@ void root(struct DynArr *stack)
 */
 void exponent(struct DynArr *stack)
 {
+    TYPE pwr;
+    
 	assert(sizeDynArr(stack) >= 1);
-	TYPE a = topDynArr(stack);
+	
+    pwr = topDynArr(stack);
 	popDynArr(stack);
-	pushDynArr(stack, exp(a));
+	pushDynArr(stack, exp(pwr));
 }
+
 /*	param: stack the stack being manipulated
 	pre: the stack contains at least one element
 	post: the top element is popped and 
@@ -177,11 +212,15 @@ void exponent(struct DynArr *stack)
 */
 void ln(struct DynArr *stack)
 {
+    TYPE of;
+    
 	assert(sizeDynArr(stack) >= 1);
-	TYPE a = topDynArr(stack);
+	
+    of = topDynArr(stack);
 	popDynArr(stack);
-	pushDynArr(stack, log(a));
+	pushDynArr(stack, log(of));
 }
+
 /*	param: stack the stack being manipulated
 	pre: the stack contains at least one element
 	post: the top element is popped and 
@@ -189,10 +228,13 @@ void ln(struct DynArr *stack)
 */
 void logten(struct DynArr *stack)
 {
+    TYPE of;
+    
 	assert(sizeDynArr(stack) >= 1);
-	TYPE a = topDynArr(stack);
+	
+    of = topDynArr(stack);
 	popDynArr(stack);
-	pushDynArr(stack, log10(a));
+	pushDynArr(stack, log10(of));
 }
 double calculate(int numInputTokens, char **inputString)
 {
@@ -244,23 +286,27 @@ double calculate(int numInputTokens, char **inputString)
 		else 
 		{
 			
-			if (isNumber(s, &num)){
+			if (isNumber(s, &num))
+            {
 				pushDynArr(stack, num);
-			}else if (strcmp(s, "pi") == 0){
+			}
+            else if (strcmp(s, "pi") == 0)
+            {
 				pushDynArr(stack, M_PI);
-			}else if (strcmp(s, "e") == 0){
+			}
+            else if (strcmp(s, "e") == 0)
+            {
 				pushDynArr(stack, M_E);
 			}
 		}
 	}	//end for 
 
-	/* FIXME: You will write this part of the function (2 steps below) 
-	 * (1) Check if everything looks OK and produce an error if needed.
-	 * (2) Store the final value in result and print it out.
-	 */
-	if (sizeDynArr(stack)!=1){
+	if (sizeDynArr(stack)!=1)
+    {
 		printf("Invalid expression. Ignore result.\n");
-	}else{
+	}
+    else
+    {
 		result = topDynArr(stack);
 	}
 	return result;
