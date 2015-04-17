@@ -36,3 +36,17 @@ Q*
 *.exe
 
 *.org
+
+*.pbxproj
+
+*.pbxproj
+
+*.xcworkspacedata
+
+*.xccheckout
+
+*.xcuserstate
+
+*.xcscheme
+
+*.plist
