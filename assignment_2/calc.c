@@ -5,6 +5,8 @@
 #include <math.h>
 #include "dynamicArray.h"
 
+#define M_PI 3.14159265
+#define M_E 2.71828182
 
 /* param: s the string
    param: num a pointer to double
