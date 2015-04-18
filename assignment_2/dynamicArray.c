@@ -1,6 +1,6 @@
 /*	dynamicArray.c: Dynamic Array implementation. */
-#include <assert.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <assert.h>
 #include "dynamicArray.h"
 
@@ -288,9 +288,16 @@ TYPE topDynArr(DynArr *v)
 void popDynArr(DynArr *v)
 {
     assert(v != 0);
-    assert(!isEmptyDynArr(v));
+    // assert(!isEmptyDynArr(v));
     
-    v->size--;
+    if(!isEmptyDynArr(v))
+    {
+        v->size--;
+    }
+    else
+    {
+        printf("Cannot remove, array already empty.");
+    }
 }
 
 /* ************************************************************************
@@ -311,14 +318,17 @@ void popDynArr(DynArr *v)
 int containsDynArr(DynArr *v, TYPE val)
 {
     assert(v != 0);
-    assert(!isEmptyDynArr(v));
+    // assert(!isEmptyDynArr(v));
     
     int i;
 	
-    for(i = 0; i < v->size; i++)
+    if(!isEmptyDynArr(v))
     {
-        if(EQ(v->data[i], val))
-            return 1;
+        for(i = 0; i < v->size; i++)
+        {
+            if(EQ(v->data[i], val))
+                return 1;
+        }
     }
     
 	return 0;
@@ -364,10 +374,17 @@ int getIndexDynArr(DynArr *v, TYPE val)
 void removeDynArr(DynArr *v, TYPE val)
 {
     assert(v != 0);
-    assert(!isEmptyDynArr(v));
+    // assert(!isEmptyDynArr(v));
     
     int idx;
     
-    idx = getIndexDynArr(v, val);
-    removeAtDynArr(v, idx);
+    if(!isEmptyDynArr(v))
+    {
+        idx = getIndexDynArr(v, val);
+        removeAtDynArr(v, idx);
+    }
+    else
+    {
+        printf("Cannot remove, bag already empty.");
+    }
 }
