@@ -1,4 +1,4 @@
-default: prog
+all: prog testLL
 
 linkedList.o: linkedList.c linkedList.h
 	gcc -Wall -g -std=c99 -c linkedList.c	
@@ -19,3 +19,4 @@ clean:
 	rm linkedList.o
 	rm linkedListMain.o
 	rm testLinkedList.o
+	rm prog testLL
