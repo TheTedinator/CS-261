@@ -226,7 +226,7 @@ void addBackList(struct linkedList *lst, TYPE e)
     assert(lst != 0);
     
     // add the link before the last link
-    _addLinkBefore(lst, lst->lastLink->prev, e);
+    _addLinkBefore(lst, lst->lastLink, e);
 }
 
 /*
