@@ -21,6 +21,8 @@ struct cirListDeque *createCirListDeque();
 void deleteCirListDeque(struct cirListDeque *q);
 
 int isEmptyCirListDeque(struct cirListDeque *q);
+int sizeCirListDeque(struct cirListDeque *q);
+
 void addBackCirListDeque(struct cirListDeque *q, TYPE val);
 void addFrontCirListDeque(struct cirListDeque *q, TYPE val);
 TYPE frontCirListDeque(struct cirListDeque *q);
