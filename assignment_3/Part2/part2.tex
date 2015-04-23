@@ -1,0 +1,113 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[letter,11pt]{scrartcl}
+
+% Fonts, Line-Spacing, and Indentation
+\usepackage{fourier}
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+\usepackage{color}
+\setlength\parindent{0pt}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage[hang,small,labelfont=bf,up,textfont=it,up]{caption}
+
+%------------------------------------------------------
+
+% Symbols
+\usepackage{amssymb,amsmath,amsthm}
+\usepackage{MnSymbol}
+\providecommand{\abs}[1]{\lvert#1\rvert}
+\providecommand{\norm}[1]{\lVert#1\rVert}
+
+%------------------------------------------------------
+
+% Sections and Margins
+\usepackage{chngcntr}
+\usepackage{scrextend}
+
+%------------------------------------------------------
+
+% Venn Diagrams and Images
+\usepackage{tikz}
+\usetikzlibrary{arrows,backgrounds,petri,shapes,topaths}
+\usepackage{float}
+\usepackage{wrapfig}
+
+%------------------------------------------------------
+
+% Margins
+\usepackage[hmarginratio=1:1,top=10mm,columnsep=20pt]{geometry}
+
+%------------------------------------------------------
+
+% Custom Theorem Setup
+\newtheorem{innercustomthm}{Theorem}
+\newenvironment{customthm}[1]
+  {\renewcommand\theinnercustomthm{#1}\innercustomthm}
+  {\endinnercustomthm}
+
+
+%------------------------------------------------------
+
+% Custom macros
+\newcommand{\inlinecode}{\texttt}
+
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\title{
+  \normalfont \normalsize
+  \textsc{Data Structures - CS 261 (Spring 2015)} \\
+  \huge Assignment \#3 -- Part 2
+}
+
+\author{Keeley Abbott
+\\ Theodore Duchow-Pressley}
+
+\date{\normalsize\today}
+
+%------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+
+%----------------------------------------------------------------------------------------
+%	ARTICLE CONTENT
+%----------------------------------------------------------------------------------------
+
+\section*{1. Which of the implementations uses more memory? Explain why.}
+
+The Linked List implementation uses more memory, because each link contains
+space for two addresses (next and previous), as well as the value. Whereas the
+Dynamic Array implementation simply contains a value.
+
+%------------------------------------------------------
+
+\section*{2. Which of the implementations is the fastest? Explain why.}
+
+In theory the Linked List implementation should be faster, but in practice the
+Dynamic Array implementation is faster. This is because for some operations,
+there are more steps with the Linked List implementation.
+
+%------------------------------------------------------
+
+\section*{3. Would you expect anything to change if the loop preformed
+  \texttt{remove()} instead of \texttt{contains()}? If so, what?}
+
+
+
+%------------------------------------------------------
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
