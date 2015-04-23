@@ -108,14 +108,21 @@ void _removeLink(struct linkedList *lst, struct DLink *l)
     assert(lst != 0);
     assert(l != 0);
     
-    /* connect the previous link's next to the link after l, and connect the next
-     link's previous to the link before l */
-    l->prev->next = l->next;
-    l->next->prev = l->prev;
+    if(!isEmptyList(lst))
+    {
+        /* connect the previous link's next to the link after l, and connect the next
+           link's previous to the link before l */
+        l->prev->next = l->next;
+        l->next->prev = l->next;
     
-    // free the memory allocated for the link being removed, and decrease list size
-    free(l);
-    lst->size--;
+        // free the memory allocated for the link being removed, and decrease list size
+        free(l);
+        lst->size--;
+    }
+    else
+    {
+        printf("Cannot remove, array already empty.\n");
+    }
 }
 
 /*
@@ -130,7 +137,17 @@ int isEmptyList(struct linkedList *lst)
     assert(lst != 0);
     
     // returns 1 if size = 0, 0 if not
-    return(lst->size == 0);
+    return (lst->size == 0)? 1 : 0;
+}
+
+/* Return the size of the list */
+int sizeLinkedList(struct linkedList *lst)
+{
+    // make sure the list is not NULL
+    assert(lst != 0);
+    
+    // returns the size of the linked list
+    return (lst->size);
 }
 
 /* De-allocate all links of the list
@@ -171,13 +188,6 @@ void deleteLinkedList(struct linkedList *lst)
  */
 void printList(struct linkedList* lst)
 {
-    // make a place to store the index number for later
-    int ind = 0;
-    
-    // make sure the list isn't NULL or empty
-    assert(lst != 0);
-    assert(!isEmptyList(lst));
-    
     // point to the first link with a value (first link after the sentinel)
     struct DLink *index = lst->firstLink->next;
     
@@ -185,12 +195,13 @@ void printList(struct linkedList* lst)
     assert(index != 0);
     
     // loop through the links, and print them
+    printf("| ");
     while(index != lst->lastLink)
     {
-        printf("Index: %d\tValue: %d\n", ind, index->value);
+        printf("%d | ", index->value);
         index = index->next;
-        ind++;
     }
+    printf("\n");
 }
 
 /* ************************************************************************
@@ -198,13 +209,13 @@ void printList(struct linkedList* lst)
  ************************************************************************ */
 
 /*
-	addfrontLink
+	addfrontList
 	param: lst the linkedList
 	param: e the element to be added
 	pre: lst is not null
 	post: lst is not empty, increased size by 1
  */
-void addfrontLink(struct linkedList *lst, TYPE e)
+void addFrontList(struct linkedList *lst, TYPE e)
 {
     // make sure the list isn't NULL
     assert(lst != 0);
@@ -230,13 +241,13 @@ void addBackList(struct linkedList *lst, TYPE e)
 }
 
 /*
-	frontLink
+	frontList
 	param: lst the linkedList
 	pre: lst is not null
 	pre: lst is not empty
 	post: none
  */
-TYPE frontLink (struct linkedList *lst)
+TYPE frontList (struct linkedList *lst)
 {
     // make sure the list isn't NULL or empty
     assert(lst != 0);
@@ -266,18 +277,14 @@ TYPE backList(struct linkedList *lst)
 
 
 /*
-	removefrontLink
+	removeFrontList
 	param: lst the linkedList
 	pre:lst is not null
 	pre: lst is not empty
 	post: size is reduced by 1
  */
-void removefrontLink(struct linkedList *lst)
+void removeFrontList(struct linkedList *lst)
 {
-    // make sure the list isn't NULL or empty
-    assert(lst != 0);
-    assert(!isEmptyList(lst));
-    
     // remove the link at first link next
     _removeLink(lst, lst->firstLink->next);
 }
@@ -291,10 +298,6 @@ void removefrontLink(struct linkedList *lst)
  */
 void removeBackList(struct linkedList *lst)
 {
-    // make sure the list isn't NULL or empty
-    assert(lst != 0);
-    assert(!isEmptyList(lst));
-    
     // remove the link at last link previous
     _removeLink(lst, lst->lastLink->prev);
 }
@@ -334,8 +337,8 @@ void addList(struct linkedList *lst, TYPE v)
 int containsList (struct linkedList *lst, TYPE e)
 {
     // make sure the list isn't NULL or empty
-    assert(lst != 0);
-    assert(!isEmptyList(lst));
+    //assert(lst != 0);
+    //assert(!isEmptyList(lst));
     
     // point to the first link with a value (first link after the sentinel)
     struct DLink *index = lst->firstLink->next;
@@ -385,7 +388,7 @@ void removeList (struct linkedList *lst, TYPE e)
         if(index->value == e)
         {
             _removeLink(lst, index);
-            break; // break to ensure we only remove the first instanc with the value e
+            break; // break to ensure we only remove the first instance with the value e
         }
         index = index->next;
     }

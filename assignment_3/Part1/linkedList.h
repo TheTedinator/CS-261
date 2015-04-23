@@ -21,6 +21,7 @@ void printList(struct linkedList* lst);
 
 /* Deque Interface */
 int 	isEmptyList(struct linkedList *lst);
+int   sizeLinkedList(struct linkedList *lst);
 void  addBackList(struct linkedList *lst, TYPE e);
 void 	addFrontList(struct linkedList *lst, TYPE e);
 
