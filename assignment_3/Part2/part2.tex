@@ -82,26 +82,39 @@
 %	ARTICLE CONTENT
 %----------------------------------------------------------------------------------------
 
-\section*{1. Which of the implementations uses more memory? Explain why.}
+\subsection*{1. Which of the implementations uses more memory? Explain why.}
 
 The Linked List implementation uses more memory, because each link contains
 space for two addresses (next and previous), as well as the value. Whereas the
 Dynamic Array implementation simply contains a value.
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{memory}
+  \caption{Memory Allocation Comparison}
+\end{figure}
+
 %------------------------------------------------------
 
-\section*{2. Which of the implementations is the fastest? Explain why.}
+\subsection*{2. Which of the implementations is the fastest? Explain why.}
 
 In theory the Linked List implementation should be faster, but in practice the
-Dynamic Array implementation is faster. This is because for some operations,
-there are more steps with the Linked List implementation.
+Dynamic Array implementation is faster. This is because the Dynamic Array
+implementation benefits from Random Access Memory.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{runtime}
+  \caption{Runtime Comparison}
+\end{figure}
 
 %------------------------------------------------------
 
 \section*{3. Would you expect anything to change if the loop preformed
   \texttt{remove()} instead of \texttt{contains()}? If so, what?}
 
-
+If we were to change the loop to remove instead of contains, there shouldn't
+be much of a change...
 
 %------------------------------------------------------
 

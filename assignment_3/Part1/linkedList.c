@@ -115,8 +115,7 @@ void _removeLink(struct linkedList *lst, struct DLink *l)
         l->prev->next = l->next;
         l->next->prev = l->next;
     
-        // free the memory allocated for the link being removed, and decrease list size
-        free(l);
+        // free the memory allocated for the link being removed, and decrease list size
         lst->size--;
     }
     else
