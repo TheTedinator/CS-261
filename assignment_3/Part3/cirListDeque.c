@@ -153,7 +153,7 @@ TYPE backCirListDeque(struct cirListDeque *q)
 void _removeLink(struct cirListDeque *q, struct DLink *lnk)
 {
 	lnk->prev->next = lnk->next;
-	lnk->next->prev = lnk->next;
+	lnk->next->prev = lnk->prev;
 	free(lnk);	 
 	q->size--;
 }
@@ -258,15 +258,15 @@ void printCirListDeque(struct cirListDeque *q)
 */
 void reverseCirListDeque(struct cirListDeque *q)
 {
-	struct DLink *t;
-	struct DLink *i = q->Sentinel;
+	struct DLink *t;//a temp variable
+	struct DLink *i = q->Sentinel;//kind of an iterator
 	do{
-		t = i->next;
-		i->next = i->prev;
+		t = i->next;//hold the next one here
+		i->next = i->prev;//swap the previous and next
 		i->prev = t;
-		i = t;
+		i = t;//move along list
 
-	}while (i->value != TYPE_SENTINEL_VALUE);
+	}while (i->value != TYPE_SENTINEL_VALUE);//until you reach the end.
 
 }
 
