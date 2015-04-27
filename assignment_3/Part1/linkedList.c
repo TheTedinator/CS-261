@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define SENTINEL_VAL 9999
 
 /* Double Link */
 struct DLink
@@ -43,6 +44,8 @@ void _initList (struct linkedList *lst)
      and set size to 0 */
     lst->firstLink->next = lst->lastLink;
     lst->lastLink->prev = lst->firstLink;
+    lst->firstLink->value = SENTINEL_VAL;
+    lst->lastLink->value = SENTINEL_VAL;
     lst->size = 0;
 }
 
@@ -113,7 +116,7 @@ void _removeLink(struct linkedList *lst, struct DLink *l)
         /* connect the previous link's next to the link after l, and connect the next
            link's previous to the link before l */
         l->prev->next = l->next;
-        l->next->prev = l->next;
+        l->next->prev = l->prev;
     
         // free the memory allocated for the link being removed, and decrease list size
         lst->size--;
