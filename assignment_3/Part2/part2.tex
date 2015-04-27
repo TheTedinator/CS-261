@@ -100,7 +100,7 @@ Dynamic Array implementation simply contains a contiguous block of memory, full 
 
 In theory the Linked List implementation should be faster, but in practice the
 Dynamic Array implementation is faster. This is because the Dynamic Array
-implementation does fewer operations and is able to randomly access items. 
+implementation does fewer operations and is able to randomly access items.
 
 \begin{figure}[H]
   \centering
@@ -110,10 +110,15 @@ implementation does fewer operations and is able to randomly access items.
 
 %------------------------------------------------------
 
-\section*{3. Would you expect anything to change if the loop preformed
+\subsection*{3. Would you expect anything to change if the loop preformed
   \texttt{remove()} instead of \texttt{contains()}? If so, what?}
 
-If we were to change the loop to remove instead of contains, the Linked List would become faster, because removing an item from a Linked List can be done in O(1) time, versus the O(n) removal from a Dynamic Array.
+If we were to change the loop to \texttt{remove()} instead of
+\texttt{contains()}, the Linked List would become faster, because removing an
+item from a Linked List can be done in O(1) time. Versus removing an item at
+any position except the last element of a Dynamic Array taking O(n) time --
+because when removing an element in any other position in the Dynamic Array
+requires shuffling all other items to fill the gap.
 
 %------------------------------------------------------
 
