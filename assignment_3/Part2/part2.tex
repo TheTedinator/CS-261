@@ -86,7 +86,7 @@
 
 The Linked List implementation uses more memory, because each link contains
 space for two addresses (next and previous), as well as the value. Whereas the
-Dynamic Array implementation simply contains a value.
+Dynamic Array implementation simply contains a contiguous block of memory, full of data.
 
 \begin{figure}[H]
   \centering
@@ -100,7 +100,7 @@ Dynamic Array implementation simply contains a value.
 
 In theory the Linked List implementation should be faster, but in practice the
 Dynamic Array implementation is faster. This is because the Dynamic Array
-implementation benefits from Random Access Memory.
+implementation does fewer operations and is able to randomly access items. 
 
 \begin{figure}[H]
   \centering
@@ -113,8 +113,7 @@ implementation benefits from Random Access Memory.
 \section*{3. Would you expect anything to change if the loop preformed
   \texttt{remove()} instead of \texttt{contains()}? If so, what?}
 
-If we were to change the loop to remove instead of contains, there shouldn't
-be much of a change...
+If we were to change the loop to remove instead of contains, the Linked List would become faster, because removing an item from a Linked List can be done in O(1) time, versus the O(n) removal from a Dynamic Array.
 
 %------------------------------------------------------
 
