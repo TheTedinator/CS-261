@@ -26,15 +26,40 @@
 int compare(TYPE left, TYPE right)
 {
     /*FIXME: write this*/
-	return 0;
-
+    
+    // make sure left and right are not null
+    assert(left != 0);
+    assert(right != 0);
+    
+    // create pointers for the data
+    struct data *l;
+    struct data *r;
+    l = (struct data *)left;
+    r = (struct data *)right;
+    
+    // compare function
+    if (l->number < r->number) {
+        return -1;
+    } else if (l->number > r->number) {
+        return 1;
+    }
+    
+    return 0;
 }
 
 /*Define this function, type casting the value of void * to the desired type*/
 void print_type(TYPE curval)
 {
     /*FIXME: write this*/
-
+    
+    // make sure the value isn't null
+    assert(curval != 0);
+    
+    // cast as struct data
+    struct data *curr;
+    curr = (struct data *)curval;
+    
+    printf ("%d", curr->number);
 }
 
 
