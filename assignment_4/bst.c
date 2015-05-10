@@ -20,7 +20,6 @@ struct BSTree {
 	struct Node *root;
 	int          cnt;
 };
-
 /*----------------------------------------------------------------------------*/
 /*
  function to initialize the binary search tree.
@@ -254,7 +253,8 @@ TYPE _leftMost(struct Node *cur) {
     while (cur->left != 0) {
         cur = cur->left;
     }
-	return cur->left;
+
+	return cur->val;
 }
 
 
@@ -309,15 +309,27 @@ struct Node *_removeNode(struct Node *cur, TYPE val) {
     
     // create a temp node
     struct Node *tmp;
-    
     // cur->val and val match
     if (compare(cur->val, val) == 0) {
+        //no children
+        if (cur->right == 0 && cur -> left == 0) {
+            free(cur);
+            return NULL;
+        }
         // node to be removed has no right child, but has left child
         if (cur->right == 0) {
             tmp = cur->left;
             free(cur);
             return tmp;
         }
+        // node to be removed has no left child, but has right child
+        if (cur->left == 0) {
+            tmp = cur->right;
+            free(cur);
+            return tmp;
+        }
+        //both children active
+
         // swap current node value with the leftmost of right child value
         cur->val = _leftMost(cur->right);
         
@@ -325,14 +337,14 @@ struct Node *_removeNode(struct Node *cur, TYPE val) {
         cur->right = _removeLeftMost(cur->right);
     }
     // if val > cur->val go right
-    else if (compare(cur->val, val) > 0) {
+    else if (compare(cur->val, val) < 0) {
         cur->right = _removeNode(cur->right, val);
     }
     // if val < cur->val go left
     else {
         cur->left = _removeNode(cur->left, val);
     }
-	return NULL;
+	return cur;
 
 }
 
@@ -556,9 +568,7 @@ void testLeftMost() {
 	myData3.name = "righty";
 	myData4.number = 10;
 	myData4.name = "lefty of lefty";
-    
 	printTestResult(compare(_leftMost(tree->root), &myData4) == 0, "_leftMost", "left most of root");
-    
 	printTestResult(compare(_leftMost(tree->root->left), &myData4) == 0, "_leftMost", "left most of left of root");
     
 	printTestResult(compare(_leftMost(tree->root->left->left), &myData4) == 0, "_leftMost", "left most of left of left of root");
@@ -619,20 +629,21 @@ int main(int argc, char *argv[]){
 
 	
    //After implementing your code, please uncommnet the following calls to the test functions and test your code 
+    printf("Testing addition:\n");
+    testAddNode();
+	
+    printf("Testing contains:\n");
+    testContainsBSTree();
+	
+    printf("Testing left most\n");
+    testLeftMost();
+	
+   printf("Testing _removeLeftMost");
+     printf("\n");
+   testRemoveLeftMost();
 
-   // testAddNode();
-	
-	printf("\n");
-   //	testContainsBSTree();
-	
-	printf("\n");
-    //testLeftMost();
-	
-	printf("\n");
-    //testRemoveLeftMost();
-	
-	printf("\n");
-    //testRemoveNode();
+   printf("Testing remove\n");
+   testRemoveNode();
     
 	
 	return 0;
