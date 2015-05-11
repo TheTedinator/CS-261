@@ -4,3 +4,11 @@ struct data {
 	int number;
 	char *name;
 };
+
+
+/* Pizza struct code */
+//struct pizza {
+//    double cost;
+//    int numToppings;
+//    char *name;
+//};
