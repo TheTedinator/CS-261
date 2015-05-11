@@ -619,6 +619,13 @@ void testRemoveNode() {
     printTestResult(cur == NULL, "_removeNode", "remove right of root 4st try");       
 }
 
+void testClear() {
+    struct BSTree *tree = buildBSTTree();
+    printTestResult(!isEmptyBSTree(tree), "isEmptyBSTree", "built tree is not empty");
+
+    clearBSTree(tree);
+    printTestResult(isEmptyBSTree(tree), "isEmptyBSTree", "a cleared tree is empty");
+}
 /*
 
 Main function for testing different fucntions of the Assignment#4.
@@ -626,8 +633,6 @@ Main function for testing different fucntions of the Assignment#4.
 */
 
 int main(int argc, char *argv[]){	
-
-	
    //After implementing your code, please uncommnet the following calls to the test functions and test your code 
     printf("Testing addition:\n");
     testAddNode();
@@ -645,7 +650,9 @@ int main(int argc, char *argv[]){
    printf("Testing remove\n");
    testRemoveNode();
     
-	
+	printf("Testing clear and isEmptyBSTree\n");
+    testClear();
+    
 	return 0;
 
 
