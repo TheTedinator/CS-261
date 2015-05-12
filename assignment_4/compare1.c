@@ -46,27 +46,6 @@ int compare(TYPE left, TYPE right) {
     return 0;
 }
 
-//double compare(TYPE left, TYPE right) {
-//    // make sure left and right are not null
-//    assert(left != 0);
-//    assert(right != 0);
-//
-//    // create pointers for the pizza
-//    struct pizza *l;
-//    struct pizza *r;
-//    l = (struct pizza *)left;
-//    r = (struct pizza *)right;
-//
-//    //compare function
-//    if (l->cost < r->cost) {
-//        return - 1;
-//    } else if (l->cost > r->cost) {
-//        return 1;
-//    }
-//
-//    return 0;
-//}
-
 /*Define this function, type casting the value of void * to the desired type*/
 void print_type(TYPE curval) {
     /*FIXME: write this*/
@@ -80,15 +59,3 @@ void print_type(TYPE curval) {
     
     printf ("Value: %d\nName: %s\n", curr->number, curr->name);
 }
-
-
-//void print_type(TYPE curval) {
-//    // make sure the value isn't null
-//    assert(curval != 0);
-//    
-//    // cast as struct pizza
-//    struct pizza *curr;
-//    curr = (struct pizza *)curval;
-//    
-//    printf ("Cost: %.2f\nToppings: %d\nName: %s\n", curr->cost, curr->numToppings, curr->name)
-//}
