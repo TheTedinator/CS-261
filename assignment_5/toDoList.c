@@ -29,8 +29,12 @@
 int compare(TYPE left, TYPE right)
 {
     /*FIXME: write this*/
-
-
+    if (left.priority < right.priority)
+        return -1;
+    else if (right.priority < left.priority)
+        return 1;
+    else
+        return 0;
 }
 
 /***************************************************************
@@ -58,7 +62,13 @@ void print_type(TYPE val)
 */
 TaskP createTask (int priority, char *desc)
 {
-  /*FIXME: Write this */
+    /*FIXME: Write this */
+    struct Task newTask;
+    
+    strcpy(newTask.description, desc);
+    newTask.priority = priority;
+    
+    return newTask;
 }
 
 /*  Save the list to a file
@@ -77,8 +87,8 @@ TaskP createTask (int priority, char *desc)
 */
 void saveList(DynArr *heap, FILE *filePtr)
 {
-  int i;
-	TaskP task;
+    int i;
+    TaskP task;
 	assert(sizeDynArr(heap) > 0);
 	for(i = 0; i < sizeDynArr(heap); i++)
 	{
@@ -97,22 +107,21 @@ void saveList(DynArr *heap, FILE *filePtr)
 */
 void loadList(DynArr *heap, FILE *filePtr)
 {
-  TaskP task;
-  char line[100];  /* Assume lines < 100 */
-  char desc[TASK_DESC_SIZE];
-  int priority;
+    TaskP task;
+    char line[100];  /* Assume lines < 100 */
+    char desc[TASK_DESC_SIZE];
+    int priority;
 
-  /* Read the priority first, then the description.
-   * fgets() is used to read string with spaces
-   */
+    /* Read the priority first, then the description.
+     * fgets() is used to read string with spaces
+     */
 
-  while(fgets(line, sizeof(line), filePtr) != 0)
+    while(fgets(line, sizeof(line), filePtr) != 0)
     {
       sscanf(line, "%d\t%[^\n]", &priority, desc);
       task = createTask(priority, desc);
       addHeap(heap, task, compare);
     } /* should use feof to make sure it found eof and not error*/
-
 }
 
 /*  Print the list in priority order.  This requires that either we sort it...or make a copy and pull
@@ -125,29 +134,29 @@ off the smallest element one at a time.  That's what we've done here.
 */
 void printList(DynArr *heap)
 {
-  DynArr *temp;
-  TaskP task;
-  assert(sizeDynArr(heap) > 0);
+    DynArr *temp;
+    TaskP task;
+    assert(sizeDynArr(heap) > 0);
 
-  temp = createDynArr(sizeDynArr(heap));
-  /* copy the main list to a temp list
-   * so that tasks can be printed out and removed.
-   */
-  copyDynArr(heap, temp);
-  while(sizeDynArr(temp) > 0)
+    temp = createDynArr(sizeDynArr(heap));
+    /* copy the main list to a temp list
+     * so that tasks can be printed out and removed.
+     */
+    copyDynArr(heap, temp);
+    while(sizeDynArr(temp) > 0)
     {
-      /* get the task */
-      /* BINHEAP FIXME */
-      /* task = getMinHeap(temp); */
-      task = getDynArr(temp,0);
+        /* get the task */
+        /* BINHEAP FIXME */
+        /* task = getMinHeap(temp); */
+        task = getDynArr(temp,0);
 
-      /* print the task */
-      printf("%d:  %s\n\n", task->priority, task->description);
-      /* remove the task , but let's not free up the memory it's pointing to since old Arr is using it!*/
-      /* BINHEAP FIXME */
-      /*removeMinHeap(temp); */
-      removeAtDynArr(temp, 0);
+        /* print the task */
+        printf("%d:  %s\n\n", task->priority, task->description);
+        /* remove the task , but let's not free up the memory it's pointing to since old Arr is using it!*/
+        /* BINHEAP FIXME */
+        /*removeMinHeap(temp); */
+        removeAtDynArr(temp, 0);
     }
-  /* free the temp list */
-  deleteDynArr(temp);
+    /* free the temp list */
+    deleteDynArr(temp);
 }

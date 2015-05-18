@@ -58,7 +58,7 @@ void print_type(TYPE val)
 */
 TaskP createThing (int priority, char *desc)
 {
-  /*FIXME: Write this */
+    /*FIXME: Write this */    
 }
 
 

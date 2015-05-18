@@ -27,11 +27,12 @@ void _initDynArr(DynArr *v, int capacity)
 {
 	assert(capacity > 0);
 	assert(v!= 0);
+    
 	v->data = malloc(sizeof(TYPE) * capacity);
 	assert(v->data != 0);
+    
 	v->size = 0;
 	v->capacity = capacity;
-
 }
 
 /* Allocate and initialize dynamic array.
@@ -44,10 +45,12 @@ void _initDynArr(DynArr *v, int capacity)
 */
 DynArr* createDynArr(int cap)
 {
-	DynArr *r;
 	assert(cap > 0);
+    DynArr *r;
+    
 	r = malloc(sizeof( DynArr));
 	assert(r != 0);
+    
 	_initDynArr(r,cap);
 	return r;
 }
@@ -83,6 +86,7 @@ void freeDynArr(DynArr *v)
 void deleteDynArr(DynArr *v)
 {
 	assert (v!= 0);
+    
 	freeDynArr(v);
 	free(v);
 }
@@ -99,13 +103,15 @@ void _dynArrSetCapacity(DynArr *v, int newCap)
 	int i;
 	TYPE *oldData;
 	int oldSize = v->size;
+    
 	oldData = v->data;
 
 	printf("========Resizing========\n");
 	/* Create a new dyn array with larger underlying array */
 	_initDynArr(v, newCap);
 
-	for(i = 0; i < oldSize; i++){
+	for(i = 0; i < oldSize; i++)
+    {
 		v->data[i] = oldData[i];
 	}
 
@@ -159,7 +165,6 @@ int sizeDynArr(DynArr *v)
 */
 void addDynArr(DynArr *v, TYPE val)
 {
-
 	assert(v!=0);
 
 	/* Check to see if a resize is necessary */
@@ -168,7 +173,6 @@ void addDynArr(DynArr *v, TYPE val)
 
 	v->data[v->size] = val;
 	v->size++;
-
 }
 
 /*	Get an element from the dynamic array from a specified position
@@ -207,6 +211,7 @@ void putDynArr(DynArr *v, int pos, TYPE val)
 	assert(v!=0);
 	assert(pos < v->size);
 	assert(pos >= 0);
+    
 	v->data[pos] = val;
 }
 
@@ -295,7 +300,6 @@ void removeAtDynArr(DynArr *v, int idx){
    }
 
    v->size--;
-
 }
 
 /*	Returns boolean (encoded in an int) demonstrating whether or not the
@@ -317,9 +321,6 @@ int isEmptyDynArr(DynArr *v)
 	else return 0;
 
 	*/
-
-
-
 }
 
 
@@ -354,6 +355,7 @@ TYPE topDynArr(DynArr *v)
 {
 	assert(v!=0);
 	assert(!isEmptyDynArr(v));
+    
 	return v->data[v->size-1];
 }
 
@@ -369,6 +371,7 @@ void popDynArr(DynArr *v)
 {
 	assert(v!=0);
 	assert(! isEmptyDynArr(v));
+    
 	v->size--;
 }
 
@@ -398,7 +401,6 @@ int containsDynArr(DynArr *v, TYPE val, comparator compare)
           if((*compare)(v->data[i], val) == 0 )
             return 1;
         return 0;
-
 }
 
 /*	Removes the first occurrence of the specified value from the collection
@@ -414,6 +416,7 @@ int containsDynArr(DynArr *v, TYPE val, comparator compare)
 void removeDynArr(DynArr *v, TYPE val, comparator compare)
 {
 	int i = 0;
+    
 	assert(v!=0);
 	assert(!isEmptyDynArr(v));
 	assert(containsDynArr(v,val, compare));  /* Design decision: Error if they try to remove something not in there! */
@@ -437,14 +440,16 @@ void removeDynArr(DynArr *v, TYPE val, comparator compare)
 */
 void copyDynArr(DynArr *source, DynArr *destination)
 {
-  int i;
-  assert(source->size > 0);
-  _initDynArr(destination, source->capacity);
-  /* copy elements to destination array */
-  for(i = 0; i < source->size; i++)
-    destination->data[i] = source->data[i];
+    int i;
+    
+    assert(source->size > 0);
+    
+    _initDynArr(destination, source->capacity);
+    /* copy elements to destination array */
+    for(i = 0; i < source->size; i++)
+        destination->data[i] = source->data[i];
 
-  destination->size = source->size;
+    destination->size = source->size;
 }
 
 /**************************************************************************
@@ -478,26 +483,29 @@ int _binarySearch(struct DynArr *v, TYPE val, comparator compare)
 
 void addDynArrOrd(DynArr *v, TYPE val, comparator compare)
 {
-  int idx = _binarySearch(v, val, compare);
-  printf("Adding to index = %d\n", idx);
-  addAtDynArr(v,idx,val);
+    int idx = _binarySearch(v, val, compare);
+    
+    printf("Adding to index = %d\n", idx);
+    addAtDynArr(v,idx,val);
 }
 
 
 int containsDynArrOrd(DynArr *v, TYPE val, comparator compare){
-  int idx = _binarySearch(v, val, compare);
-  // rem: if it's not in there, it'll return size.  This could hold a previously added value...so must check the index!
-  if (EQ(v->data[idx],val) && idx < v->size)
-    return 1;
-  else return 0;
+    int idx = _binarySearch(v, val, compare);
+    
+    // rem: if it's not in there, it'll return size.  This could hold a previously added value...so must check the index!
+    if (EQ(v->data[idx],val) && idx < v->size)
+        return 1;
+    else return 0;
 }
 
 
 void removeDynArrOrd(DynArr *v, TYPE val, comparator compare)
 {
-  int idx = _binarySearch(v, val, compare);
-  if(EQ(v->data[idx], val))
-    removeAtDynArr(v, idx);
+    int idx = _binarySearch(v, val, compare);
+    
+    if(EQ(v->data[idx], val))
+        removeAtDynArr(v, idx);
 }
 
 
@@ -521,7 +529,19 @@ void _adjustHeap(DynArr *heap, int max, int pos, comparator compare);
 */
 int _smallerIndexHeap(DynArr *heap, int i, int j, comparator compare)
 {
-  /* FIXME Write this */
+    /* FIXME Write this */
+    assert(heap != 0);
+    assert(i < sizeDynArr(heap));
+    assert(j < sizeDynArr(heap));
+    
+    int smaller;
+    
+    if (compare(getDynArr(heap, i), getDynArr(heap, j)) == -1)
+        smaller = -1;
+    else
+        smaller = j;
+    
+    return smaller;
 }
 
 /*	Get the first node, which has the min priority, from the heap
@@ -533,7 +553,11 @@ int _smallerIndexHeap(DynArr *heap, int i, int j, comparator compare)
 TYPE getMinHeap(DynArr *heap)
 {
 
-  /* FIXME: Write This */
+    /* FIXME: Write This */
+    assert(heap != 0);
+    assert(sizeDynArr(heap) > 0);
+    
+    return (getDynArr(heap, 0));
 }
 
 /*	Add a node to the heap
@@ -545,7 +569,22 @@ TYPE getMinHeap(DynArr *heap)
 */
 void addHeap(DynArr *heap, TYPE val, comparator  compare)
 {
-  /* FIXME: Write This */
+    /* FIXME: Write This */
+    int parent;
+    int pos = sizeDynArr(heap);
+    
+    addDynArr(heap, val);
+    
+    while (pos != 0)
+    {
+        parent = (pos - 1) / 2;
+        if (compare(getDynArr(heap, pos), getDynArr(heap, parent)))
+        {
+            swapDynArr(heap, parent, pos);
+            pos = parent;
+        }
+    }
+    else break;
 }
 
 /*	Adjust heap to maintain heap property
@@ -559,7 +598,31 @@ void addHeap(DynArr *heap, TYPE val, comparator  compare)
 
 void _adjustHeap(DynArr *heap, int max, int pos, comparator compare)
 {
-  /* FIXME: Write this */
+    /* FIXME: Write this */
+    assert(heap != 0);
+    assert(max <= sizeDynArr(heap));
+    
+    int left = (pos * 2) + 1;
+    int right = (pos * 2) + 2;
+    int smaller;
+    
+    if (right <= max) // check to see if there are two children
+    {
+        smaller = _smallerIndexHeap(heap, left, right); // get the index of the smallest child
+        if (compare(getDynArr(heap, smaller), getDynArr(heap, pos)) == -1)
+        {
+            swapDynArr(heap, pos, smaller);
+            _adjustHeap(heap, max, smaller);
+        }
+    }
+    else if (left <= max) // if there's only one child
+    {
+        if (compare(getDynArr(heap, left), getDynArr(heap, pos)) == -1)
+        {
+            swapDynArr(heap, pos, left);
+            _adjustHeap(heap, max, left);
+        }
+    }
 }
 
 /*	Remove the first node, which has the min priority, from the heap
@@ -570,7 +633,14 @@ void _adjustHeap(DynArr *heap, int max, int pos, comparator compare)
 */
 void removeMinHeap(DynArr *heap, comparator compare)
 {
-  /* FIXME: Write this */
+    /* FIXME: Write this */
+    assert(sizeDynArr(heap) > 0);
+    
+    int last = sizeDynArr(heap) - 1;
+    
+    putDynArr(heap, 0, getDynArr(heap, last)); // put the last element at the root
+    removeAtDynArr(heap, last); // remove the last element
+    _adjustHeap(heap, last, 0); // rebuild the heap
 }
 
 /* builds a heap from an arbitrary dynArray
@@ -582,7 +652,16 @@ void removeMinHeap(DynArr *heap, comparator compare)
 
 void _buildHeap(DynArr *heap, comparator compare)
 {
-  /* FIXME: Write This */
+    /* FIXME: Write This */
+    assert(heap != 0);
+    assert(sizeDynArr(heap) > 0);
+    
+    int max = sizeDynArr(heap) - 1;
+     
+    for (int i = max; i >= 0; i--)
+    {
+        _adjustHeap(heap, max, i);
+    }
 }
 /*
     In-place sort of the heap
@@ -594,7 +673,14 @@ void _buildHeap(DynArr *heap, comparator compare)
 
 void sortHeap(DynArr *heap, comparator compare)
 {
-  /* FIXME: Write this */
+    /* FIXME: Write this */
+    int max = sizeDynArr(heap) - 1;
+    
+    _buildHeap(heap);
+    for (int i = max; i > 0; i--) {
+        swapDynArr(heap, i, 0);
+        _adjustHeap(heap, max, 0);
+    }
 }
 
 
