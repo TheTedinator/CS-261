@@ -57,5 +57,5 @@ void print_type(TYPE curval) {
     struct data *curr;
     curr = (struct data *)curval;
     
-    printf ("Value: %d\nName: %s\n", curr->number, curr->name);
+    printf ("Value: %d Name: %s", curr->number, curr->name);
 }
