@@ -657,9 +657,9 @@ void _buildHeap(DynArr *heap, comparator compare)
     assert(heap != 0);
     assert(sizeDynArr(heap) > 0);
     
-    int max = sizeDynArr(heap) - 1;
-     
-    for (int i = max; i >= 0; i--)
+    int max = sizeDynArr(heap);
+    
+    for (int i = max/2 - 1; i >= 0; i--)
     {
         _adjustHeap(heap, max, i, compare);
     }
@@ -675,12 +675,15 @@ void _buildHeap(DynArr *heap, comparator compare)
 void sortHeap(DynArr *heap, comparator compare)
 {
     /* FIXME: Write this */
-    int max = sizeDynArr(heap) - 1;
+    assert(heap != 0);
+    assert(sizeDynArr(heap) > 0);
     
     _buildHeap(heap, compare);
-    for (int i = max; i > 0; i--) {
-        swapDynArr(heap, i, 0);
-        _adjustHeap(heap, max, 0, compare);
+    
+    for (int i = sizeDynArr(heap) - 1; i > 0; i--)
+    {
+        swapDynArr(heap, 0, i);
+        _adjustHeap(heap, i, 0, compare);
     }
 }
 
