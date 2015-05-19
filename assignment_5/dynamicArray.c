@@ -583,8 +583,9 @@ void addHeap(DynArr *heap, TYPE val, comparator  compare)
             swapDynArr(heap, parent, pos);
             pos = parent;
         }
+        else
+            return;
     }
-    else break;
 }
 
 /*	Adjust heap to maintain heap property
@@ -608,11 +609,11 @@ void _adjustHeap(DynArr *heap, int max, int pos, comparator compare)
     
     if (right <= max) // check to see if there are two children
     {
-        smaller = _smallerIndexHeap(heap, left, right); // get the index of the smallest child
+        smaller = _smallerIndexHeap(heap, left, right, compare); // get the index of the smallest child
         if (compare(getDynArr(heap, smaller), getDynArr(heap, pos)) == -1)
         {
             swapDynArr(heap, pos, smaller);
-            _adjustHeap(heap, max, smaller);
+            _adjustHeap(heap, max, smaller, compare);
         }
     }
     else if (left <= max) // if there's only one child
@@ -620,7 +621,7 @@ void _adjustHeap(DynArr *heap, int max, int pos, comparator compare)
         if (compare(getDynArr(heap, left), getDynArr(heap, pos)) == -1)
         {
             swapDynArr(heap, pos, left);
-            _adjustHeap(heap, max, left);
+            _adjustHeap(heap, max, left, compare);
         }
     }
 }
@@ -640,7 +641,7 @@ void removeMinHeap(DynArr *heap, comparator compare)
     
     putDynArr(heap, 0, getDynArr(heap, last)); // put the last element at the root
     removeAtDynArr(heap, last); // remove the last element
-    _adjustHeap(heap, last, 0); // rebuild the heap
+    _adjustHeap(heap, last, 0, compare); // rebuild the heap
 }
 
 /* builds a heap from an arbitrary dynArray
@@ -660,7 +661,7 @@ void _buildHeap(DynArr *heap, comparator compare)
      
     for (int i = max; i >= 0; i--)
     {
-        _adjustHeap(heap, max, i);
+        _adjustHeap(heap, max, i, compare);
     }
 }
 /*
@@ -676,10 +677,10 @@ void sortHeap(DynArr *heap, comparator compare)
     /* FIXME: Write this */
     int max = sizeDynArr(heap) - 1;
     
-    _buildHeap(heap);
+    _buildHeap(heap, compare);
     for (int i = max; i > 0; i--) {
         swapDynArr(heap, i, 0);
-        _adjustHeap(heap, max, 0);
+        _adjustHeap(heap, max, 0, compare);
     }
 }
 

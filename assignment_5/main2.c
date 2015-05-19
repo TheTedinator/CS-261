@@ -29,8 +29,12 @@
 int compare(TYPE left, TYPE right)
 {
     /*FIXME: write this*/
-
-
+    if (left.priority < right.priority)
+        return -1;
+    else if (right.priority < left.priority)
+        return 1;
+    else
+        return 0;
 }
 
 /***************************************************************
@@ -58,7 +62,13 @@ void print_type(TYPE val)
 */
 TaskP createThing (int priority, char *desc)
 {
-    /*FIXME: Write this */    
+    /*FIXME: Write this */
+    struct Task newTask;
+    
+    strcpy(newTask.description, desc);
+    newTask.priority = priority;
+    
+    return newTask;
 }
 
 

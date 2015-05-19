@@ -29,9 +29,17 @@
 int compare(TYPE left, TYPE right)
 {
     /*FIXME: write this*/
-    if (left.priority < right.priority)
+    assert(left != 0); // make sure left isn't NULL
+    assert(right != 0); // make sure right isn't NULL
+    
+    // create pointers for the data
+    TaskP l = left;
+    TaskP r = right;
+    
+    // compare function
+    if (l->priority < r->priority)
         return -1;
-    else if (right.priority < left.priority)
+    else if (l->priority > r->priority)
         return 1;
     else
         return 0;
@@ -63,10 +71,10 @@ void print_type(TYPE val)
 TaskP createTask (int priority, char *desc)
 {
     /*FIXME: Write this */
-    struct Task newTask;
+    TaskP newTask;
     
-    strcpy(newTask.description, desc);
-    newTask.priority = priority;
+    newTask->priority = priority;
+    strcpy(newTask->description, desc);
     
     return newTask;
 }
