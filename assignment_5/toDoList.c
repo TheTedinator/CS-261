@@ -155,15 +155,15 @@ void printList(DynArr *heap)
     {
         /* get the task */
         /* BINHEAP FIXME */
-        /* task = getMinHeap(temp); */
-        task = getDynArr(temp,0);
+        task = getMinHeap(temp);
+        // task = getDynArr(temp,0);
 
         /* print the task */
         printf("%d:  %s\n\n", task->priority, task->description);
         /* remove the task , but let's not free up the memory it's pointing to since old Arr is using it!*/
         /* BINHEAP FIXME */
-        /*removeMinHeap(temp); */
-        removeAtDynArr(temp, 0);
+        removeMinHeap(temp, compare);
+        // removeAtDynArr(temp, 0);
     }
     /* free the temp list */
     deleteDynArr(temp);

@@ -41,6 +41,7 @@ int main (int argc, const char * argv[])
                 FILE *reader = fopen(filename, "r");
                 loadList(mainList, reader);
                 printf("The list has been loaded from file successfully.\n");
+                fclose(reader);
                 break;
                 
             case 's':
@@ -51,6 +52,7 @@ int main (int argc, const char * argv[])
                 FILE *writer = fopen(filename, "w+");
                 saveList(mainList, writer);
                 printf("The list has been saved io the file successfully. \n");
+                fclose(writer);
                 break;
                 
             case 'a':
