@@ -531,13 +531,13 @@ int _smallerIndexHeap(DynArr *heap, int i, int j, comparator compare)
 {
     /* FIXME Write this */
     assert(heap != 0);
-    assert(i < sizeDynArr(heap));
-    assert(j < sizeDynArr(heap));
+//    assert(i < sizeDynArr(heap));
+//    assert(j < sizeDynArr(heap));
     
     int smaller;
     
     if (compare(getDynArr(heap, i), getDynArr(heap, j)) == -1)
-        smaller = -1;
+        smaller = i;
     else
         smaller = j;
     
@@ -607,7 +607,7 @@ void _adjustHeap(DynArr *heap, int max, int pos, comparator compare)
     int right = (pos * 2) + 2;
     int smaller;
     
-    if (right <= max) // check to see if there are two children
+    if (right < max) // check to see if there are two children
     {
         smaller = _smallerIndexHeap(heap, left, right, compare); // get the index of the smallest child
         if (compare(getDynArr(heap, smaller), getDynArr(heap, pos)) == -1)
@@ -616,7 +616,7 @@ void _adjustHeap(DynArr *heap, int max, int pos, comparator compare)
             _adjustHeap(heap, max, smaller, compare);
         }
     }
-    else if (left <= max) // if there's only one child
+    else if (left < max) // if there's only one child
     {
         if (compare(getDynArr(heap, left), getDynArr(heap, pos)) == -1)
         {
