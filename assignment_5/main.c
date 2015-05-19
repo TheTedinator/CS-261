@@ -7,13 +7,11 @@
 
 int main (int argc, const char * argv[])
 {
-    TaskP newTask;
-    TaskP firstTask;
-    char desc[TASK_DESC_SIZE], filename[50], *nlptr;
+    char *filename = malloc(sizeof(char)*250);
+    char *description = malloc(sizeof(char)*250);
     int priority;
     char cmd = ' ';
-    FILE *filePointer;
-    DynArr* mainList = createDynArr(10);
+    DynArr *mainList = createDynArr(10);
 
     printf("\n\n** TO-DO LIST APPLICATION **\n\n");
     
@@ -30,125 +28,80 @@ int main (int argc, const char * argv[])
                );
         /* get input command (from the keyboard) */
         cmd = getchar();
+        /* clear the trailing newline character */
+        while (getchar() != '\n');
         
-        /* Fixme:  Your logic goes here! */
         switch (cmd)
         {
-            case 'l': // load the to-do list
+            case 'l':
+                printf("Please enter the filenmae: ");
+                fgets(filename, 100, stdin);
+                if(filename[strlen(filename) - 1] == '\n')
+                    filename[strlen(filename) - 1] = 0;
+                FILE *reader = fopen(filename, "r");
+                loadList(mainList, reader);
+                printf("The list has been loaded from file successfully.\n");
+                break;
+                
+            case 's':
                 printf("Please enter the filename: ");
-                if (fgets(filename, sizeof(filename), stdin) != 0)
-                {
-                    nlptr = strchr(filename, '\n'); // remove the trailing newline
-                    if (nlptr)
-                        *nlptr = '\0';
-                }
-                filePointer = fopen(filename, "r"); /// open the file
-                if (filePointer == 0)
-                {
-                    fprintf(stderr, "Cannot open %s\n", filename);
-                    break;
-                }
-                loadList(mainList, filePointer); // load the list from the file
-                fclose(filePointer); // close the file
-                printf("The list has been successfully loaded from the file.\n\n");
+                fgets(filename, 100, stdin);
+                if(filename[strlen(filename) - 1] == '\n')
+                    filename[strlen(filename) - 1] = 0;
+                FILE *writer = fopen(filename, "w+");
+                saveList(mainList, writer);
+                printf("The list has been saved io the file successfully. \n");
                 break;
                 
-            case 's': // save the to-do list
-                if (sizeof(mainList) > 0)
-                {
-                    printf("Please enter the filename: "); // get the filename from the user input
-                    if (fgets(filename, sizeof(filename), stdin) != 0)
-                    {
-                        nlptr = strchr(filename, '\n'); // remove trailing newline
-                        if (nlptr)
-                            *nlptr = '\0';
-                    }
-                    filePointer = fopen(filename, "w");
-                    if (filePointer == 0)
-                    {
-                        fprintf(stderr, "Cannot open %s\n", filename);
-                        break;
-                    }
-                    saveList(mainList, filePointer); // save the list to the file
-                    fclose(filePointer); // close the file
-                    printf("The list has been successfully saved to the file.\n\n");
-                }
-                else
-                    printf("Cannot save an empty list.\n\n");
-                break;
-                
-            case 'a': // add a new task
+            case 'a':
                 printf("Please enter the task description: ");
-                if (fgets(desc, sizeof(desc), stdin) != 0)
-                {
-                    nlptr = strchr(desc, '\n'); // remove trailing newline
-                    if (nlptr)
-                        *nlptr = '\0';
-                }
-                do
-                {
-                    printf("Please enter the task priority (0-999): ");
-                    scanf("%d", &priority);
-                } while (!(priority >= 0 && priority <= 999));
-                    
-                newTask = createTask(priority, desc);
-                addHeap(mainList, newTask, compare);
-                printf("The task '%s' has been added to the list.\n\n", desc);
+                fgets(description, 100, stdin);
+                if (description[strlen(description) - 1] == '\n')
+                    description[strlen(description) - 1] = 0;
+                printf("Please enter the task priority (0-999): ");
+                scanf("%d", &priority);
+                while (getchar() != '\n');
+                TaskP dummy = createTask(priority, description);
+                addHeap(mainList, dummy, compare);
+                printf("The task '%s' has been added to the list.\n", description);
                 break;
                 
-            case 'g': // get the first task to be completed
-                if (sizeDynArr(mainList) > 0)
-                {
-                    firstTask = getMinHeap(mainList);
-                    printf("The first tast to complete is: %s\n\n", firstTask->description);
-                }
+            case 'g':
+                if (!isEmptyDynArr(mainList))
+                    printf("The first task is: %s\n", ((struct Task *)getMinHeap(mainList))->description);
                 else
-                    printf("No tasks left to complete.\n\n");
+                    printf("The list is empty...\n");
                 break;
                 
-            case 'r': // remove the first task
-                if (sizeDynArr(mainList) > 0)
+            case 'r':
+                if (isEmptyDynArr(mainList))
+                    printf("The list is empty...\n");
+                else
                 {
+                    description = ((struct Task *)getMinHeap(mainList))->description;
                     removeMinHeap(mainList, compare);
-                    printf("The first task has been completed.\n\n");
+                    printf("The first task '%s' has been removed from the list.\n", description);
                 }
-                else
-                    printf("No tasks left to complete.\n\n");
                 break;
                 
-            case 'p': // print the list
-                if (sizeDynArr(mainList) > 0)
-                {
+            case 'p':
+                if(isEmptyDynArr(mainList))
+                    printf("The list is empty...\n");
+                else
                     printList(mainList);
-                }
-                else
-                    printf("Cannot print an empty list.\n\n");
                 break;
                 
-            case 'e': // exit the program
-                printf("Exiting Application...");
-                break; 
-                
-            default:
-                printf("Please try again, I didn't understand your input.\n\n"
-                       "Press:\n"
-                       "'l' to load to-do list from a file\n"
-                       "'s' to save to-do list to a file\n"
-                       "'a' to add a new task\n"
-                       "'g' to get the first task\n"
-                       "'r' to remove the first task\n"
-                       "'p' to print the list\n"
-                       "'e' to exit the program\n"
-                       );
+            case 'e':
+                printf("Exiting Application...\n");
                 break;
         }
-
-      /* Note: We have provided functions called printList(), saveList() and loadList() for you
+        
+        /* Note: We have provided functions called printList(), saveList() and loadList() for you
          to use.  They can be found in toDoList.c */
     }
     while(cmd != 'e');
     /* delete the list */
     deleteDynArr(mainList);
-
+    
     return 0;
 }

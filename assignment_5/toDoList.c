@@ -71,10 +71,10 @@ void print_type(TYPE val)
 TaskP createTask (int priority, char *desc)
 {
     /*FIXME: Write this */
-    TaskP newTask;
+    TaskP newTask = (struct Task *)malloc(sizeof(struct Task));
     
-    newTask->priority = priority;
     strcpy(newTask->description, desc);
+    newTask->priority = priority;
     
     return newTask;
 }

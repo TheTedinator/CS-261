@@ -63,10 +63,10 @@ void print_type(TYPE val)
 TaskP createThing (int priority, char *desc)
 {
     /*FIXME: Write this */
-    struct Task newTask;
+    struct Task *newTask;
     
-    strcpy(newTask.description, desc);
-    newTask.priority = priority;
+    strcpy(newTask->description, desc);
+    newTask->priority = priority;
     
     return newTask;
 }
