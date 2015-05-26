@@ -21,8 +21,7 @@ typedef struct hashMap hashMap;
 
 
 /* initialize the supplied hashMap struct*/
-void _initMap (struct hashMap * ht, int tableSize)
-{
+void _initMap (struct hashMap * ht, int tableSize) {
 	int index;
 	if(ht == NULL)
 		return;
@@ -46,27 +45,59 @@ hashMap *createMap(int tableSize) {
 /*
  Free all memory used by the buckets.
  */
-void _freeMap (struct hashMap * ht)
-{  
-	/*write this*/		
+void _freeMap (struct hashMap * ht) {
+	/*write this*/
+    assert(ht != 0);
+    
+    hashLink *temp;
+    
+    for (int i = 0; i < ht->tableSize; i++) {
+        while (ht->table[i] != 0) {
+            temp = ht->table[i];
+            ht->table[i] = ht->table[i]->next;
+            free(temp);
+        }
+    }
 }
 
 /* Deallocate buckets and the hash map.*/
 void deleteMap(hashMap *ht) {
 	assert(ht!= 0);
-	/* Free all memory used by the buckets */
+	
+    /* Free all memory used by the buckets */
 	_freeMap(ht);
-	/* free the hashMap struct */
+	
+    /* free the hashMap struct */
 	free(ht);
 }
 
 /* 
 Resizes the hash table to be the size newTableSize 
 */
-void _setTableSize(struct hashMap * ht, int newTableSize, comparator keyCompare, hashFuncPtr hashFunc)
-
-{
-	/*write this*/			
+void _setTableSize(struct hashMap * ht, int newTableSize, comparator keyCompare, hashFuncPtr hashFunc) {
+	/*write this*/
+    int idx, temp_count = ht->count;
+    hashLink **newTable = malloc(sizeof(hashLink *) * newTableSize);
+    hashLink *tempOld;
+    hashLink *tempNew;
+    
+    for (int i = 0; i < ht->tableSize; i++) {
+        tempOld = ht->table[i];
+        while (tempOld != 0) {
+            idx = (*hashFunc)(tempOld->key) % newTableSize;
+            tempNew = malloc(sizeof(hashLink *));
+            tempNew->value = tempOld->value;
+            tempNew->key = tempOld->key;
+            tempNew->next = newTable[idx];
+            newTable[idx] = tempNew;
+            tempOld = tempOld->next;
+        }
+    }
+    
+    _freeMap(ht);
+    ht->tableSize = newTableSize;
+    ht->count = temp_count;
+    ht->table = newTable;
 }
 
 /*
@@ -81,9 +112,31 @@ void _setTableSize(struct hashMap * ht, int newTableSize, comparator keyCompare,
  also, you must monitor the load factor and resize when the load factor is greater than
  or equal LOAD_FACTOR_THRESHOLD (defined in hashMap.h).
  */
-void insertMap (struct hashMap * ht, void* k, void* v, comparator keyCompare, hashFuncPtr hashFunc)
-{  
-	/*write this*/	
+void insertMap (struct hashMap * ht, void* k, void* v, comparator keyCompare, hashFuncPtr hashFunc) {
+	/*write this*/
+    int idx = (*hashFunc)(k) % ht->tableSize;
+    float lf;
+    hashLink *temp = ht->table[idx];
+    
+    while (temp != 0) {
+        if ((*keyCompare)(temp->key, k) == 0) {
+            temp->value = v;
+            return;
+        }
+        temp = temp->next;
+    }
+    
+    temp = malloc(sizeof(hashLink*));
+    temp->value = v;
+    temp->key = k;
+    temp->next = ht->table[idx];
+    ht->table[idx] = temp;
+    ht->count++;
+    
+    // check the load factor and see if resize is needed
+    lf = ((float)ht->count)/ht->tableSize;
+    if (lf >= LOAD_FACTOR_THRESHOLD)
+        _setTableSize(ht, ht->tableSize*2, keyCompare, hashFunc);
 }
 
 /*
@@ -94,9 +147,17 @@ void insertMap (struct hashMap * ht, void* k, void* v, comparator keyCompare, ha
  
  if the supplied key is not in the hashtable return NULL.
  */
-void* atMap (struct hashMap * ht, void* k, comparator keyCompare, hashFuncPtr hashFunc)
-{ 
+void* atMap (struct hashMap * ht, void* k, comparator keyCompare, hashFuncPtr hashFunc) {
 	/*write this*/
+    int idx = (*hashFunc)(k) % ht->tableSize;
+    hashLink *temp = ht->table[idx];
+    
+    while (temp != 0) {
+        if ((*keyCompare)(temp->key, k) == 0)
+            return temp->value;
+        temp = temp->next;
+    }
+    
 	return 0;
 }
 
@@ -104,9 +165,17 @@ void* atMap (struct hashMap * ht, void* k, comparator keyCompare, hashFuncPtr ha
  a simple yes/no if the key is in the hashtable. 
  0 is no, all other values are yes.
  */
-int containsKey (struct hashMap * ht, void* k, comparator keyCompare, hashFuncPtr hashFunc)
-{  
+int containsKey (struct hashMap * ht, void* k, comparator keyCompare, hashFuncPtr hashFunc) {
 	/*write this*/
+    int idx = (*hashFunc)(k) % ht->tableSize;
+    hashLink *temp = ht->table[idx];
+    
+    while (temp != 0) {
+        if ((*keyCompare)(temp->key, k) == 0)
+            return 1;
+        temp = temp->next;
+    }
+    
 	return 0;
 }
 
@@ -116,38 +185,66 @@ int containsKey (struct hashMap * ht, void* k, comparator keyCompare, hashFuncPt
  cannot be found do nothing (or print a message) but do not use an assert which
  will end your program.
  */
-void removeKey (struct hashMap * ht, void* k, comparator keyCompare, hashFuncPtr hashFunc)
-{  
-	/*write this*/	
+void removeKey (struct hashMap * ht, void* k, comparator keyCompare, hashFuncPtr hashFunc) {
+	/*write this*/
+    int idx = (*hashFunc)(k) % ht->tableSize;
+    hashLink *remove, *temp = ht->table[idx];
+    
+    while (temp->next != 0) {
+        if ((*keyCompare)(temp->key, k) == 0) {
+            remove = temp->next;
+            temp->next = temp->next->next;
+            free(remove->value);
+            free(remove->key);
+            free(remove);
+            ht->count--;
+            return;
+        }
+        temp = temp->next;
+    }
+    
+    if ((*keyCompare)(ht->table[idx]->key, k) == 0) {
+        remove = ht->table[idx];
+        ht->table[idx] = ht->table[idx]->next;
+        free(remove->value);
+        free(remove->key);
+        free(remove);
+        ht->count--;
+        return;
+    }
 }
 
 /*
  returns the number of hashLinks in the table
  */
-int size (struct hashMap *ht)
-{  
+int size (struct hashMap *ht) {
 	/*write this*/
-	return 0;
+	return ht->count;
 	
 }
 
 /*
  returns the number of buckets in the table
  */
-int capacity(struct hashMap *ht)
-{  
+int capacity(struct hashMap *ht) {
 	/*write this*/
-	return 0;
+	return ht->tableSize;
 }
 
 /*
  returns the number of empty buckets in the table, these are buckets which have
  no hashlinks hanging off of them.
  */
-int emptyBuckets(struct hashMap *ht)
-{  
+int emptyBuckets(struct hashMap *ht) {
 	/*write this*/
-	return 0;
+    int numEmpty = 0;
+    
+    for (int i = 0; i < ht->tableSize; i++) {
+        if (ht->table[i] == 0)
+            numEmpty++;
+    }
+    
+	return numEmpty;
 }
 
 /*
@@ -157,15 +254,15 @@ int emptyBuckets(struct hashMap *ht)
  would mean that there are more hashlinks then buckets (but remember hashlinks
  are like linked list nodes so they can hang from each other)
  */
-float tableLoad(struct hashMap *ht)
-{  
+float tableLoad(struct hashMap *ht) {
 	/*write this*/
-	return 0;
+    float tbl = (float)ht->count/ht->tableSize;
+    
+	return tbl;
 }
 
 /* print the hashMap */
- void printMap (struct hashMap * ht, keyPrinter kp, valPrinter vp)
-{
+ void printMap (struct hashMap * ht, keyPrinter kp, valPrinter vp) {
         int i;
         struct hashLink *temp;
         for(i = 0;i < capacity(ht); i++){
@@ -185,8 +282,7 @@ float tableLoad(struct hashMap *ht)
 }
 
 /* print the keys/values ..in linear form, no buckets */
- void printKeyValues (struct hashMap * ht, keyPrinter kp, valPrinter vp)
-{
+ void printKeyValues (struct hashMap * ht, keyPrinter kp, valPrinter vp) {
         int i;
         struct hashLink *temp;
         for(i = 0;i < capacity(ht); i++){
@@ -213,27 +309,21 @@ struct mapItr {
 };
 
 
-struct mapItr *createMapIterator(struct hashMap *ht)
-{
+struct mapItr *createMapIterator(struct hashMap *ht) {
   struct mapItr *myItr = malloc(sizeof(struct mapItr)); /* malloc_5 */
   initMapIterator(ht, myItr);
   return myItr;
 }
 
-void initMapIterator(struct hashMap *ht, struct mapItr *itr)
-{
+void initMapIterator(struct hashMap *ht, struct mapItr *itr) {
   itr->count = 0;
   itr->current = ht->table[itr->count];
   itr->map = ht;
 }
 
-int  hasNextMap(struct mapItr *itr)
-{
-
+int  hasNextMap(struct mapItr *itr) {
   /* skip all the empty buckets */
-
-  while(itr->map->table[itr->count] == 0)
-    {
+  while(itr->map->table[itr->count] == 0) {
        itr->count++;
        itr->current = itr->map->table[itr->count];
     }
@@ -241,31 +331,26 @@ int  hasNextMap(struct mapItr *itr)
   if (itr->count >= itr->map->tableSize)
     return 0;
 
-
   return 1;
-
 }
 
-void*  nextMap(struct mapItr *itr)
-{
+void*  nextMap(struct mapItr *itr) {
   void* key;
   key = itr->current->key;
 
   /* set up for subsequent call to has Next */
   itr->current = itr->current->next;
-  if(itr->current == 0) /* at end of the list*/
-    {
-   itr->count++; /*move on to the next bucket */
-   itr->current = itr->map->table[itr->count];
-}
+  if(itr->current == 0) /* at end of the list*/ {
+      itr->count++; /*move on to the next bucket */
+      itr->current = itr->map->table[itr->count];
+  }
   return(key);
 }
 
-void removeMap(struct mapItr *itr)
-{
+void removeMap(struct mapItr *itr) {
   printf("Not yet implemented \n");
-  /* Actually only a convenience since I can iterate through, get keys, and then call removeKey */
-  /* This is, in fact, how I wouldimplement it here...I would simply get the last returned key and call remove Key */
-  /* A slighlty more efficient solution would include double links and allow a remove iwthout calling removeKey...but it's not worth the effort here! */
-
+    /* Actually only a convenience since I can iterate through, get keys, and then call removeKey */
+    /* This is, in fact, how I wouldimplement it here...I would simply get the last returned key and call remove Key */
+    /* A slighlty more efficient solution would include double links and allow a remove iwthout calling removeKey...but it's not worth the effort here! */
+    
 }

@@ -8,21 +8,18 @@
 #include "hashMap.h"
 
 
-void keyPrint(void* k)
-{
+void keyPrint(void* k) {
   char *key = (char *)k;
   printf("%s", key);
 }
 
 
-void valPrint(void* v)
-{
+void valPrint(void* v) {
   int *val = (int *)v;
   printf("%d", *val);
 }
 
-int myCompare(void *s1, void *s2)
-{
+int myCompare(void *s1, void *s2) {
   char *key1 = (char *)s1;
   char *key2 = (char *)s2;
 
@@ -32,8 +29,7 @@ int myCompare(void *s1, void *s2)
 /* Better solution: Pass the hashfunciton in to the hashMap functions with a function pointer */
 
 /*the first hashing function you can use*/
-int hash1(void *key)
-{
+int hash1(void *key) {
   char *str = (char *)key;
   
   int i;
@@ -44,8 +40,7 @@ int hash1(void *key)
 }
 
 /*the second hashing function you can use*/
-int hash2(void * key)
-{
+int hash2(void * key) {
   char *str = (char *)key;
   
   int i;
@@ -56,35 +51,30 @@ int hash2(void * key)
 }
 
 
-void generateTagCloudData(struct hashMap *ht, char *outFileName )
-{
+void generateTagCloudData(struct hashMap *ht, char *outFileName ) {
   /* Read data to get max value */
   struct mapItr *myItr;
   
   myItr = createMapIterator(ht);
   
-
   char *word;
   int *count;
   int maxVal = 0;
 
-  while(hasNextMap(myItr))
-    {
+  while(hasNextMap(myItr)) {
       word = (char *)nextMap(myItr);
       count = (int *)atMap(ht,word, myCompare, hash2);
       if(*count > maxVal)
-	maxVal = *count;
+          maxVal = *count;
     }
   
-
   printf("MAX VAL = %d\n", maxVal);
 
   initMapIterator(ht, myItr);
 
 
   /* Normalize all values */
-   while(hasNextMap(myItr))
-    {
+   while(hasNextMap(myItr)) {
       word = (char*) nextMap(myItr);
       count = (int *)atMap(ht,word, myCompare, hash2);
       *count = sqrt(*count);
@@ -96,8 +86,7 @@ void generateTagCloudData(struct hashMap *ht, char *outFileName )
   
   FILE *tagFile = fopen(outFileName, "w+");
   
-  while(hasNextMap(myItr))
-    {
+  while(hasNextMap(myItr)) {
       word = (char *)nextMap(myItr);
       count = atMap(ht,word, myCompare, hash2);
       fprintf(tagFile, "%s,%d\n", word, *count);
@@ -120,7 +109,7 @@ char* getWord(FILE *file);
 int main (int argc, const char * argv[]) {
 	const char* filename;
 	struct hashMap *hashTable;
-	int tableSize = 10; 
+    int tableSize = 10;
 	clock_t timer;
 	FILE *fileptr;
         void*  key;
@@ -144,7 +133,24 @@ int main (int argc, const char * argv[]) {
 	hashTable = createMap(tableSize);
 
 	/*... concordance code goes here ...*/
-		
+    fileptr = fopen(filename, "r+");
+    char* wordNext = "starter";
+    while(wordNext != 0) {
+        wordNext = getWord(fileptr);
+        if(wordNext != 0) {
+            if(containsKey(hashTable, wordNext, myCompare, hash2) == 0){
+                void* v = malloc(sizeof(void*));
+                *(int*)v = 1;
+                insertMap(hashTable, wordNext, v, myCompare, hash2);
+            }
+            else {
+                /*int newVal = *(int*)(atMap(hashTable, wordNext, myCompare, hash2)) + 1;
+                 void* newVal2 = &newVal;
+                 insertMap(hashTable, wordNext, newVal2, myCompare, hash2);*/
+                *(int*)(atMap(hashTable, wordNext, myCompare, hash2)) = *(int*)atMap(hashTable, wordNext, myCompare, hash2)+1;
+            }
+        }
+    }
 	/*... concordance code ends here ...*/
 
 	printMap(hashTable, keyPrint, valPrint);
@@ -153,7 +159,7 @@ int main (int argc, const char * argv[]) {
 	timer = clock() - timer;
 	printf("\nconcordance ran in %f seconds\n", (float)timer / (float)CLOCKS_PER_SEC);
 	printf("Table emptyBuckets = %d\n", emptyBuckets(hashTable));
-        printf("Table count = %d\n", size(hashTable));
+    printf("Table count = %d\n", size(hashTable));
 	printf("Table capacity = %d\n", capacity(hashTable));
 	printf("Table load = %f\n", tableLoad(hashTable));
 
@@ -162,23 +168,22 @@ int main (int argc, const char * argv[]) {
 	removeKey(hashTable, "and", myCompare, hash2);
 	removeKey(hashTable, "me", myCompare, hash2);
 	removeKey(hashTable, "the", myCompare, hash2);
-	/* printMap(hashTable); */
-        printKeyValues(hashTable, keyPrint, valPrint);
+	
+    /* printMap(hashTable); */
+    printKeyValues(hashTable, keyPrint, valPrint);
 
-	 /* For Tag Cloud */
-	 /*generateTagCloudData(hashTable,"tag.csv");
-	*/
+    /* For Tag Cloud */
+    generateTagCloudData(hashTable,"tag.csv");
 
-
-         /* Free up our keys and values using our iterator!!  Also printing them as we go along */
-         while(hasNextMap(myItr))
-           {
-             key = nextMap(myItr);
-             int *value = atMap(hashTable,key, myCompare, hash2);
-             printf("Freeing ...Key = %s, value = %d \n", key, *value);
-             free(value);  /* To match the malloc above*/
-             free(key);
-           }
+    /* Free up our keys and values using our iterator!!  Also printing them as we go along */
+    struct mapItr *myItr = createMapIterator(hashTable);
+    while(hasNextMap(myItr)) {
+        key = nextMap(myItr);
+        int *value = atMap(hashTable,key, myCompare, hash2);
+        printf("Freeing ...Key = %s, value = %d \n", key, *value);
+        free(value);  /* To match the malloc above*/
+        free(key);
+    }
 
 	deleteMap(hashTable);
 	printf("\nDeleted the table\n");
@@ -194,11 +199,9 @@ char* getWord(FILE *file)
 	char* word = malloc(sizeof(char) * maxLength);
 	assert(word != NULL);
 
-	while( (character = fgetc(file)) != EOF)
-	{
-                character = tolower(character);  /* On will be the same as on */
-		if((length+1) > maxLength)
-		{
+	while( (character = fgetc(file)) != EOF) {
+        character = tolower(character);  /* On will be the same as on */
+		if((length+1) > maxLength) {
 			maxLength *= 2;
 			word = (char*)realloc(word, maxLength);
 		}
@@ -214,11 +217,11 @@ char* getWord(FILE *file)
 			break;
 	}
 
-	if(length == 0)
-	{
+	if(length == 0) {
 		free(word);
 		return NULL;
 	}
+    
 	word[length] = '\0';
 	return word;
 }
