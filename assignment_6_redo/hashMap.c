@@ -270,9 +270,9 @@ float tableLoad(struct hashMap *ht)
                 while(temp != 0){
                         printf("Key:");
                         (*kp)(temp->key);
-                        printf("| Value: ");
+                        printf("|Value:");
                         (*vp)(temp->value);
-                        printf(" -> ");
+                        printf("  ->  ");
                         temp=temp->next;
                 }
         }
