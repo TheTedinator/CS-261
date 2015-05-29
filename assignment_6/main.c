@@ -110,10 +110,10 @@ char* getWord(FILE *file);
 int main (int argc, const char * argv[]) {
 	const char* filename;
 	struct hashMap *hashTable;
-    int tableSize = 10;
+  int tableSize = 10;
 	clock_t timer;
 	FILE *fileptr;
-        void*  key;
+  void*  key;
     /*
      this part is using command line arguments, you can use them if you wish
      but it is not required. DO NOT remove this code though, we will use it for
@@ -166,6 +166,7 @@ int main (int argc, const char * argv[]) {
 
 	printf("Deleting keys\n");
 
+  assert(containsKey(hashTable, "and", myCompare, hash2));
 	removeKey(hashTable, "and", myCompare, hash2);
 	removeKey(hashTable, "me", myCompare, hash2);
 	removeKey(hashTable, "the", myCompare, hash2);

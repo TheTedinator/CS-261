@@ -98,6 +98,7 @@ void _setTableSize(struct hashMap * ht, int newTableSize, comparator keyCompare,
     ht->tableSize = newTableSize;
     ht->count = temp_count;
     ht->table = newTable;
+    printf("Resized\n");
 }
 
 /*
@@ -113,12 +114,12 @@ void _setTableSize(struct hashMap * ht, int newTableSize, comparator keyCompare,
  or equal LOAD_FACTOR_THRESHOLD (defined in hashMap.h).
  */
 void insertMap (struct hashMap * ht, void* k, void* v, comparator keyCompare, hashFuncPtr hashFunc) {
-     printf("Inserting '%s'\n", (char*) k);
+    
 	/*write this*/
     int idx = (*hashFunc)(k) % ht->tableSize;
     float lf;
     hashLink *temp = ht->table[idx];
-    
+    printf("Inserting '%s' into bucket %d\n", (char*) k, idx);
     if (temp == NULL){
         temp = malloc(sizeof(hashLink*));
         assert(temp!=0);
@@ -205,7 +206,7 @@ void removeKey (struct hashMap * ht, void* k, comparator keyCompare, hashFuncPtr
 	/*write this*/
     int idx = (*hashFunc)(k) % ht->tableSize;
     hashLink *remove, *temp = ht->table[idx];
-    
+    printf("Removing '%s' from bucket %d\n", (char*) k, idx);
     while (temp->next != 0) {
         if ((*keyCompare)(temp->key, k) == 0) {
             remove = temp->next;
