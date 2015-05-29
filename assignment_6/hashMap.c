@@ -76,28 +76,29 @@ Resizes the hash table to be the size newTableSize
 */
 void _setTableSize(struct hashMap * ht, int newTableSize, comparator keyCompare, hashFuncPtr hashFunc) {
 	/*write this*/
-    int idx, temp_count = ht->count;
-    hashLink **newTable = malloc(sizeof(hashLink *) * newTableSize);
-    hashLink *tempOld;
-    hashLink *tempNew;
+    hashMap *newMap = createMap(newTableSize);
     
     for (int i = 0; i < ht->tableSize; i++) {
-        tempOld = ht->table[i];
-        while (tempOld != 0) {
-            idx = (*hashFunc)(tempOld->key) % newTableSize;
-            tempNew = malloc(sizeof(hashLink *));
-            tempNew->value = tempOld->value;
-            tempNew->key = tempOld->key;
-            tempNew->next = newTable[idx];
-            newTable[idx] = tempNew;
-            tempOld = tempOld->next;
+        hashLink *temp = ht->table[i];
+        while (temp != 0) {
+            int idx = (*hashFunc)(temp->key) % newTableSize;
+            
+            if (newMap->table[idx] == 0) {
+                newMap->table[idx] = temp;
+            } else {
+                hashLink *buckLink = newMap->table[idx];
+                
+                while (buckLink->next != 0) {
+                    buckLink = buckLink->next;
+                }
+                buckLink->next = temp;
+            }
+            temp = temp->next;
+            newMap->count++;
         }
     }
-    
     _freeMap(ht);
-    ht->tableSize = newTableSize;
-    ht->count = temp_count;
-    ht->table = newTable;
+    ht = newMap;
 }
 
 /*
@@ -125,10 +126,10 @@ void insertMap (struct hashMap * ht, void* k, void* v, comparator keyCompare, ha
         temp->value = v;
         temp->key = k;
         temp->next = NULL;
-    }else{
+    } else {
         while (temp){
             if ((*keyCompare)(temp->key, k) == 0) {
-                temp->value = v;
+                temp->value++;
                 return;
             }
 
@@ -186,6 +187,7 @@ int containsKey (struct hashMap * ht, void* k, comparator keyCompare, hashFuncPt
     if (temp == NULL) {
         return 0;
     }
+    
     while (temp != NULL) {
         if ((*keyCompare)(temp->key, k) == 0)
             return 1;
@@ -204,9 +206,10 @@ int containsKey (struct hashMap * ht, void* k, comparator keyCompare, hashFuncPt
 void removeKey (struct hashMap * ht, void* k, comparator keyCompare, hashFuncPtr hashFunc) {
 	/*write this*/
     int idx = (*hashFunc)(k) % ht->tableSize;
-    hashLink *remove, *temp = ht->table[idx];
+    hashLink *remove;
+    hashLink *temp = ht->table[idx];
     
-    while (temp->next != 0) {
+    while (temp != 0) {
         if ((*keyCompare)(temp->key, k) == 0) {
             remove = temp->next;
             temp->next = temp->next->next;
