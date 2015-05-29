@@ -161,13 +161,13 @@ int main (int argc, const char * argv[]) {
 
 	/*... concordance code ends here ...*/
 
-	printMap(hashTable, keyPrint, valPrint);
+	//printMap(hashTable, keyPrint, valPrint);
 
 	fclose(fileptr);
 	timer = clock() - timer;
 	printf("\nconcordance ran in %f seconds\n", (float)timer / (float)CLOCKS_PER_SEC);
 	printf("Table emptyBuckets = %d\n", emptyBuckets(hashTable));
-        printf("Table count = %d\n", size(hashTable));
+  printf("Table count = %d\n", size(hashTable));
 	printf("Table capacity = %d\n", capacity(hashTable));
 	printf("Table load = %f\n", tableLoad(hashTable));
 
@@ -177,7 +177,7 @@ int main (int argc, const char * argv[]) {
 	removeKey(hashTable, "me", myCompare, hash2);
 	removeKey(hashTable, "the", myCompare, hash2);
 	/* printMap(hashTable); */
-        printKeyValues(hashTable, keyPrint, valPrint);
+       // printKeyValues(hashTable, keyPrint, valPrint);
 
 	 /* For Tag Cloud */
 	 /*generateTagCloudData(hashTable,"tag.csv");

@@ -56,7 +56,7 @@ void _freeMap (struct hashMap * ht)
         while (ht->table[i] != 0) {
             temp = ht->table[i];
             ht->table[i] = ht->table[i]->next;
-            free(temp);
+           // free(temp);
         }
     }
 }
@@ -75,32 +75,28 @@ Resizes the hash table to be the size newTableSize
 */
 void _setTableSize(struct hashMap * ht, int newTableSize, comparator keyCompare, hashFuncPtr hashFunc)
 {
-	hashMap *newMap = createMap(newTableSize);
-    
-    for (int i = 0; i < ht->tableSize; i++) {
-        hashLink *temp = ht->table[i];
-        printf("%p\n", temp);
-        while (temp != 0) {
-            printf("Not null\n");
-            int idx = (*hashFunc)(temp->key) % newTableSize;
-            
-            if (newMap->table[idx] == 0) {
-                newMap->table[idx] = temp;
-            } else {
-                hashLink *buckLink = newMap->table[idx];
-                
-                while (buckLink->next != 0) {
-                    buckLink = buckLink->next;
-                }
-                buckLink->next = temp;
-            }
-            temp = temp->next;
-            newMap->count++;
-            printf("newmap->coutn%d\n",newMap->count);
+	hashLink ** newTable = (hashLink**)malloc(sizeof(hashLink*) * newTableSize);
+  printf("Changing the tableSize to %d\n", newTableSize);
+  for (int i = 0; i < ht->tableSize; ++i){
+    hashLink *oldLink = ht->table[i];
+    while (oldLink!=NULL){
+      int newidx = (*hashFunc)(oldLink->key)%newTableSize;//find the new bucket
+      if (newTable[newidx] == NULL){//if this bucket is empty, put it in at the top
+        newTable[newidx] = oldLink;
+      }else{//otherwise, find the end
+        hashLink *t = newTable[newidx];
+        while (t->next != NULL){
+          t = t->next;
         }
-    }
+        t = oldLink;
+      }//end if
+      oldLink = oldLink -> next;
+    }//end iteration through old bucket
+  }//end iteration through old map
+  ht->table = newTable;
+  ht->tableSize = newTableSize;
+  
 
-    ht = newMap;			
 }
 
 /*
@@ -146,8 +142,9 @@ void insertMap (struct hashMap * ht, void* k, void* v, comparator keyCompare, ha
 
       // check the load factor and see if resize is needed
       float lf = ((float)ht->count)/ht->tableSize;
-      if (lf >= LOAD_FACTOR_THRESHOLD)
+      if (lf >= LOAD_FACTOR_THRESHOLD){
         _setTableSize(ht, ht->tableSize*2, keyCompare, hashFunc);
+      }
 }
 
 /*
