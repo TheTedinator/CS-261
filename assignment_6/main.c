@@ -106,6 +106,7 @@ void generateTagCloudData(struct hashMap *ht, char *outFileName ) {
  to free this memory when you no longer need it.
  */
 char* getWord(FILE *file);
+
 int main (int argc, const char * argv[]) {
 	const char* filename;
 	struct hashMap *hashTable;
@@ -121,17 +122,17 @@ int main (int argc, const char * argv[]) {
      if you wish not to use command line arguments manually type in your
      filename and path in the else case.
      */
-    if(argc == 2)
-        filename = argv[1];
-    else
-        filename = "input1.txt"; /*specify your input text file here*/
+  if(argc == 2)
+      filename = argv[1];
+  else
+      filename = "input1.txt"; /*specify your input text file here*/
 
-    printf("opening file: %s\n", filename);
+  printf("opening file: %s\n", filename);
 
 	timer = clock();
 
 	hashTable = createMap(tableSize);
-
+  printf("Successfully created hashtable\n");
 	/*... concordance code goes here ...*/
     fileptr = fopen(filename, "r+");
     char* wordNext = "starter";

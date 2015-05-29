@@ -113,26 +113,40 @@ void _setTableSize(struct hashMap * ht, int newTableSize, comparator keyCompare,
  or equal LOAD_FACTOR_THRESHOLD (defined in hashMap.h).
  */
 void insertMap (struct hashMap * ht, void* k, void* v, comparator keyCompare, hashFuncPtr hashFunc) {
+     printf("Inserting '%s'\n", (char*) k);
 	/*write this*/
     int idx = (*hashFunc)(k) % ht->tableSize;
     float lf;
     hashLink *temp = ht->table[idx];
     
-    while (temp != 0) {
-        if ((*keyCompare)(temp->key, k) == 0) {
-            temp->value = v;
-            return;
+    if (temp == NULL){
+        temp = malloc(sizeof(hashLink*));
+        assert(temp!=0);
+        temp->value = v;
+        temp->key = k;
+        temp->next = NULL;
+    }else{
+        while (temp){
+            if ((*keyCompare)(temp->key, k) == 0) {
+                temp->value = v;
+                return;
+            }
+
+            temp = temp->next;
         }
-        temp = temp->next;
+        temp = ht->table[idx];
+        while (temp->next){
+            temp = temp->next;
+        }
+        hashLink *newlink = malloc(sizeof(hashLink*));
+        assert(newlink!=0);
+        newlink->value = v;
+        newlink->key = k;
+        temp->next = newlink;
     }
-    
-    temp = malloc(sizeof(hashLink*));
-    temp->value = v;
-    temp->key = k;
-    temp->next = ht->table[idx];
-    ht->table[idx] = temp;
     ht->count++;
-    
+   
+
     // check the load factor and see if resize is needed
     lf = ((float)ht->count)/ht->tableSize;
     if (lf >= LOAD_FACTOR_THRESHOLD)
@@ -169,8 +183,10 @@ int containsKey (struct hashMap * ht, void* k, comparator keyCompare, hashFuncPt
 	/*write this*/
     int idx = (*hashFunc)(k) % ht->tableSize;
     hashLink *temp = ht->table[idx];
-    
-    while (temp != 0) {
+    if (temp == NULL) {
+        return 0;
+    }
+    while (temp != NULL) {
         if ((*keyCompare)(temp->key, k) == 0)
             return 1;
         temp = temp->next;
