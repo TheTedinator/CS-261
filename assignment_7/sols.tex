@@ -41,6 +41,12 @@
 % Venn Diagrams and Images
 \usepackage{tikz}
 \usetikzlibrary{arrows,backgrounds,petri,shapes,topaths}
+\tikzset{
+  treenode/.style = {align=center, inner sep=0pt, text centered,
+    font=\sffamily},
+  arn_n/.style = {treenode, circle, black, font=\sffamily\bfseries, draw=orange,
+    text width=1.5em}
+}
 \usepackage{float}
 \usepackage{wrapfig}
 \usepackage{makecell}
@@ -214,8 +220,49 @@ This gives us a set of unique integers that look like this:
   order in which neighbor vertices are visited. Construct another graph in
   which a breadth-first search will uncover a solution in fewer steps.}
 
+\begin{figure}[H]
+  \centering
+  \caption{Example graph -- question 5\label{fig:graph}}
+  {
+    \begin{tikzpicture}[->,>=stealth,level/.style={sibling distance = 3cm/#1,
+        level distance = 1.5cm}]
+      \node [arn_n] {$a$}
+      child{ node [arn_n] {$b$}
+        child[missing]{}
+        child{ node [arn_n] {$d$}
+          child{ node [arn_n] {$h$}}
+          child[missing]{}
+        }
+      }
+      child{ node [arn_n] {$c$}
+        child[missing]{}
+        child{ node [arn_n] {$e$}
+          child{ node [arn_n] {$f$}}
+          child[missing]{}
+        }
+      }
+      ;
+    \end{tikzpicture}
+  }
+\end{figure}
 
+\subsection[depthFirst]{Depth-first search case}
 
+Using the above graph with a starting path at 'a' and ending at 'h', and
+assuming a clockwise push order for the stack. For a depth-first search, we
+will uncover the solution by visiting $\lbrace a,b,d,h\rbrace$. While for a
+breadth-first search we will uncover the solution after visiting $\lbrace
+a,b,c,d,e,h,f\rbrace$. Thus depth-first search is clearly completed in fewer
+steps in this case.
+
+\subsection[breadthFirst]{Breadth-first search case}
+
+Again using the above graph with a starting path at 'a' and ending at 'c', and
+again assuming a clockwise push order for the stack. With a depth-first
+search, we will uncover the solution by visiting $\lbrace
+a,b,d,h,c\rbrace$. Whereas with a breadth-first search we will uncover the
+solution after visiting $\lbrace a,b,c\rbrace$. Thus breadth-first search is
+clearly completed in fewer steps in this case.
 
 %------------------------------------------------------
 
