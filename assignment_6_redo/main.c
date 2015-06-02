@@ -35,7 +35,7 @@ int myCompare(void *s1, void *s2)
 int hash1(void *key)
 {
   char *str = (char *)key;
-  
+
   int i;
   int r = 0;
   for (i = 0; str[i] != '\0'; i++)
@@ -47,7 +47,7 @@ int hash1(void *key)
 int hash2(void * key)
 {
   char *str = (char *)key;
-  
+
   int i;
   int r = 0;
   for (i = 0; str[i] != '\0'; i++)
@@ -60,9 +60,9 @@ void generateTagCloudData(struct hashMap *ht, char *outFileName )
 {
   /* Read data to get max value */
   struct mapItr *myItr;
-  
+
   myItr = createMapIterator(ht);
-  
+
 
   char *word;
   int *count;
@@ -75,7 +75,7 @@ void generateTagCloudData(struct hashMap *ht, char *outFileName )
       if(*count > maxVal)
 	maxVal = *count;
     }
-  
+
 
   printf("MAX VAL = %d\n", maxVal);
 
@@ -88,14 +88,14 @@ void generateTagCloudData(struct hashMap *ht, char *outFileName )
       word = (char*) nextMap(myItr);
       count = (int *)atMap(ht,word, myCompare, hash2);
       *count = sqrt(*count);
-    } 
+    }
 
   /* Now write them to file */
-  
+
   initMapIterator(ht, myItr);
-  
+
   FILE *tagFile = fopen(outFileName, "w+");
-  
+
   while(hasNextMap(myItr))
     {
       word = (char *)nextMap(myItr);
@@ -120,7 +120,7 @@ char* getWord(FILE *file);
 int main (int argc, const char * argv[]) {
 	const char* filename;
 	struct hashMap *hashTable;
-	int tableSize = 10; 
+	int tableSize = 10;
 	clock_t timer;
 	FILE *fileptr;
         //void*  key;
@@ -177,7 +177,7 @@ int main (int argc, const char * argv[]) {
 	removeKey(hashTable, "me", myCompare, hash2);
 	removeKey(hashTable, "the", myCompare, hash2);
 	/* printMap(hashTable); */
-       // printKeyValues(hashTable, keyPrint, valPrint);
+        printKeyValues(hashTable, keyPrint, valPrint);
 
 	 /* For Tag Cloud */
 	 /*generateTagCloudData(hashTable,"tag.csv");
